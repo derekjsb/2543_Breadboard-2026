@@ -16,6 +16,27 @@ public final class Constants {
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
   }
+  public static final class JoystickChannels {
+    public static final int OPERATOR_RIGHT_JOYSTICK = 0;
+    public static final int OPERATOR_LEFT_JOYSTICK = 1;
+    public static final int DRIVER_RIGHT_JOYSTICK = 2;
+    public static final int DRIVER_LEFT_JOYSTICK = 3;
+  }
+  public static final class ButtonIndex {
+
+    public static final class DriverRight {
+      public static final int PRECISION_MODE_BUTTON = 1;
+      public static final int RESET_PIGEON_BUTTON = 4;
+      
+    }
+
+    public static final class DriverLeft {
+      public static final int TURBO_MODE_BUTTON = 1;
+      public static final int CAMERA_TEST_BUTTON = 2;
+      public static final int STRAFE_LEFT_BUTTON = 3;
+      public static final int STRAFE_RIGHT_BUTTON = 4;
+    }
+  }
   public static final double disabledSeconds = 140;
   public static final double endgameSeconds = 30;
   public static final double endgameWarning = 5;

@@ -270,19 +270,6 @@
               "true_icon": "None",
               "false_icon": "None"
             }
-          },
-          {
-            "title": "Motor Type",
-            "x": 640.0,
-            "y": 384.0,
-            "width": 256.0,
-            "height": 128.0,
-            "type": "ComboBox Chooser",
-            "properties": {
-              "topic": "/SmartDashboard/SendableChooser[0]",
-              "period": 0.06,
-              "sort_options": false
-            }
           }
         ]
       }
@@ -379,16 +366,16 @@
       }
     },
     {
-      "name": "VP Testing",
+      "name": "Swerve Diagnostics",
       "grid_layout": {
         "layouts": [],
         "containers": [
           {
             "title": "Pose",
-            "x": 640.0,
-            "y": 0.0,
-            "width": 768.0,
-            "height": 384.0,
+            "x": 512.0,
+            "y": 128.0,
+            "width": 896.0,
+            "height": 512.0,
             "type": "Field",
             "properties": {
               "topic": "/Pose",
@@ -405,142 +392,45 @@
             }
           },
           {
-            "title": "Mod 1 Angle",
-            "x": 0.0,
-            "y": 384.0,
-            "width": 256.0,
-            "height": 256.0,
-            "type": "Radial Gauge",
-            "properties": {
-              "topic": "/SmartDashboard/Module 0/RootSpeed/Speed/angle",
-              "period": 0.06,
-              "data_type": "double",
-              "start_angle": 0.0,
-              "end_angle": 360.0,
-              "min_value": 0.0,
-              "max_value": 360.0,
-              "number_of_labels": 8,
-              "wrap_value": true,
-              "show_pointer": true,
-              "show_ticks": true
-            }
-          },
-          {
-            "title": "limelight-twelve",
-            "x": 0.0,
-            "y": 0.0,
-            "width": 640.0,
+            "title": "Swerve Drive",
+            "x": 128.0,
+            "y": 256.0,
+            "width": 384.0,
             "height": 384.0,
-            "type": "Camera Stream",
+            "type": "SwerveDrive",
             "properties": {
-              "topic": "/CameraPublisher/limelight-twelve",
+              "topic": "/SmartDashboard/Swerve Drive",
               "period": 0.06,
-              "rotation_turns": 0
+              "show_robot_rotation": true,
+              "rotation_unit": "Radians"
             }
           },
           {
-            "title": "Mod 2 Angle",
+            "title": "Swerve Speed Factor",
             "x": 256.0,
-            "y": 384.0,
+            "y": 128.0,
             "width": 256.0,
-            "height": 256.0,
-            "type": "Radial Gauge",
+            "height": 128.0,
+            "type": "Text Display",
             "properties": {
-              "topic": "/SmartDashboard/Module 1/RootSpeed/Speed/angle",
+              "topic": "/Preferences/Swerve Speed Factor",
               "period": 0.06,
               "data_type": "double",
-              "start_angle": 0.0,
-              "end_angle": 360.0,
-              "min_value": 0.0,
-              "max_value": 360.0,
-              "number_of_labels": 8,
-              "wrap_value": true,
-              "show_pointer": true,
-              "show_ticks": true
+              "show_submit_button": true
             }
           },
           {
-            "title": "Mod 3 Angle",
-            "x": 512.0,
-            "y": 384.0,
-            "width": 256.0,
-            "height": 256.0,
-            "type": "Radial Gauge",
-            "properties": {
-              "topic": "/SmartDashboard/Module 2/RootSpeed/Speed/angle",
-              "period": 0.06,
-              "data_type": "double",
-              "start_angle": 0.0,
-              "end_angle": 360.0,
-              "min_value": 0.0,
-              "max_value": 360.0,
-              "number_of_labels": 8,
-              "wrap_value": true,
-              "show_pointer": true,
-              "show_ticks": true
-            }
-          },
-          {
-            "title": "Mod 4 Angle",
-            "x": 768.0,
-            "y": 384.0,
-            "width": 256.0,
-            "height": 256.0,
-            "type": "Radial Gauge",
-            "properties": {
-              "topic": "/SmartDashboard/Module 3/RootSpeed/Speed/angle",
-              "period": 0.06,
-              "data_type": "double",
-              "start_angle": 0.0,
-              "end_angle": 360.0,
-              "min_value": 0.0,
-              "max_value": 360.0,
-              "number_of_labels": 8,
-              "wrap_value": true,
-              "show_pointer": true,
-              "show_ticks": true
-            }
-          },
-          {
-            "title": "tx",
-            "x": 1024.0,
-            "y": 384.0,
+            "title": "Swerve Precision Factor",
+            "x": 128.0,
+            "y": 128.0,
             "width": 128.0,
             "height": 128.0,
             "type": "Text Display",
             "properties": {
-              "topic": "/limelight-twelve/tx",
+              "topic": "/Preferences/Swerve Precision Factor",
               "period": 0.06,
               "data_type": "double",
-              "show_submit_button": false
-            }
-          },
-          {
-            "title": "ta",
-            "x": 1152.0,
-            "y": 384.0,
-            "width": 128.0,
-            "height": 128.0,
-            "type": "Text Display",
-            "properties": {
-              "topic": "/limelight-twelve/ta",
-              "period": 0.06,
-              "data_type": "double",
-              "show_submit_button": false
-            }
-          },
-          {
-            "title": "ty",
-            "x": 1024.0,
-            "y": 512.0,
-            "width": 128.0,
-            "height": 128.0,
-            "type": "Text Display",
-            "properties": {
-              "topic": "/limelight-twelve/ty",
-              "period": 0.06,
-              "data_type": "double",
-              "show_submit_button": false
+              "show_submit_button": true
             }
           }
         ]

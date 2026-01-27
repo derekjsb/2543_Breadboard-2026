@@ -4,19 +4,34 @@
 
 package frc.robot;
 
+import static edu.wpi.first.units.Units.*;
+import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
+import com.ctre.phoenix6.swerve.jni.SwerveJNI.DriveState;
+import com.ctre.phoenix6.swerve.SwerveRequest;
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.Constants.JoystickChannels;
+import frc.robot.Constants.ButtonIndex;
+import frc.robot.Constants.ButtonIndex.DriverLeft;
+import frc.robot.Constants.ButtonIndex.DriverRight;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.commands.FlywheelSetSpeedCommand;
 import frc.robot.commands.LedColorCommand;
 import frc.robot.commands.LedEnableCommand;
 import frc.robot.commands.TurretResetCommand;
+import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.FlywheelSubsystem;
 import frc.robot.subsystems.LedSubsystem;
 import frc.robot.subsystems.TurretSubsystem;
+
+import com.ctre.phoenix6.swerve.SwerveRequest;
+
+import edu.wpi.first.util.sendable.Sendable;
+import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
@@ -25,6 +40,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 // import java.util.prefs.Preferences;
@@ -55,6 +71,18 @@ public class RobotContainer {
   DigitalInput m_limitSwitch = new DigitalInput(0);
   private final Trigger turretResetTrigger = new Trigger(() -> (!m_limitSwitch.get()));
 
+
+  private final Joystick operatorLeftStick;
+  private final Joystick operatorRightStick;
+  private final Joystick driverLeftStick;
+  private final Joystick driverRightStick;
+  private double MaxSpeed;
+  private double MaxAngularRate;
+  private final SwerveRequest.FieldCentric drive;
+  private final SwerveRequest.RobotCentric strafe;
+  private final Telemetry logger;
+  public final CommandSwerveDrivetrain drivetrain;
+
   // Replace with CommandPS4Controller or CommandJoystick if needed
   // private final CommandXboxController m_driverController =
   //     new CommandXboxController(OperatorConstants.kDriverControllerPort);
@@ -63,6 +91,24 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
+    // initi create joysticks
+    operatorLeftStick = new Joystick(JoystickChannels.OPERATOR_LEFT_JOYSTICK);
+    operatorRightStick = new Joystick(JoystickChannels.OPERATOR_RIGHT_JOYSTICK);
+    driverLeftStick = new Joystick(JoystickChannels.DRIVER_LEFT_JOYSTICK);
+    driverRightStick = new Joystick(JoystickChannels.DRIVER_RIGHT_JOYSTICK);
+    
+    // swerve system
+    MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
+    MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
+    drive = new SwerveRequest.FieldCentric()
+      .withDeadband(MaxSpeed * 0.05).withRotationalDeadband(MaxAngularRate * 0.05) 
+      .withDriveRequestType(DriveRequestType.OpenLoopVoltage); 
+    strafe = new SwerveRequest.RobotCentric()
+      .withDriveRequestType(DriveRequestType.OpenLoopVoltage);
+    logger = new Telemetry(MaxSpeed);
+    drivetrain = TunerConstants.createDrivetrain();
+    Settings.Init();
+configureSwerveBindings();
     configureBindings();
   }
 
@@ -75,10 +121,81 @@ public class RobotContainer {
    * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
    * joysticks}.
    */
+
+   // check for precision or turbo mode
+private double getSpeedFactor() {
+    double speedFactor = 1;
+    if (driverRightStick.getRawButton(DriverRight.PRECISION_MODE_BUTTON)) {
+      speedFactor =  Settings.getSwervePrecisionFactor();
+    } else if (!driverLeftStick.getRawButton(DriverLeft.TURBO_MODE_BUTTON)) {
+      speedFactor = Settings.getSwerveSpeedFactor();
+    } 
+    return MaxSpeed * speedFactor;
+  }
+
+private void configureSwerveBindings() {
+      
+    // drive system  
+    drivetrain.setDefaultCommand(
+          drivetrain.applyRequest(() ->
+              drive
+                .withVelocityX(-driverLeftStick.getY() * getSpeedFactor()) 
+                .withVelocityY(-driverLeftStick.getX() * getSpeedFactor()) 
+                .withRotationalRate(-driverRightStick.getZ() * getSpeedFactor()) 
+          )
+      );
+      final var idle = new SwerveRequest.Idle();
+      RobotModeTriggers.disabled().whileTrue(
+          drivetrain.applyRequest(() -> idle).ignoringDisable(true)
+      );
+      drivetrain.registerTelemetry(logger::telemeterize);
+
+SmartDashboard.putData("Swerve Drive", new Sendable() {
+  @Override
+  public void initSendable(SendableBuilder builder) {
+    builder.setSmartDashboardType("SwerveDrive");
+
+    builder.addDoubleProperty("Front Left Angle", () -> drivetrain.getModule(0).getPosition(true).angle.getRadians(), null);
+    builder.addDoubleProperty("Front Left Velocity", () -> drivetrain.getModule(0).getDriveMotor().getVelocity(true).getValueAsDouble(), null);
+
+    builder.addDoubleProperty("Front Right Angle", () -> drivetrain.getModule(1).getPosition(true).angle.getRadians(), null);
+    builder.addDoubleProperty("Front Right Velocity", () -> drivetrain.getModule(1).getDriveMotor().getVelocity(true).getValueAsDouble(), null);
+
+    builder.addDoubleProperty("Back Left Angle", () -> drivetrain.getModule(2).getPosition(true).angle.getRadians(), null);
+    builder.addDoubleProperty("Back Left Velocity", () -> drivetrain.getModule(2).getDriveMotor().getVelocity(true).getValueAsDouble(), null);
+
+    builder.addDoubleProperty("Back Right Angle", () -> drivetrain.getModule(3).getPosition(true).angle.getRadians(), null);
+    builder.addDoubleProperty("Back Right Velocity", () -> drivetrain.getModule(3).getDriveMotor().getVelocity(true).getValueAsDouble(), null);
+
+    builder.addDoubleProperty("Robot Angle", () -> drivetrain.getState().RawHeading.getRadians(), null);
+  }
+});
+
+      // pigeon reset
+      new JoystickButton(driverRightStick, 4).onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
+
+      // strafe right
+      double strafeSpeed = Settings.getSwerveStrafeSpeed();
+      new JoystickButton(driverLeftStick, 4).whileTrue(drivetrain.applyRequest(() -> strafe
+        .withVelocityY(0)
+        .withVelocityX(strafeSpeed)
+        .withRotationalRate(0)));
+
+      // strafe left
+      new JoystickButton(driverLeftStick, 3).whileTrue(drivetrain.applyRequest(() -> strafe
+        .withVelocityY(0)
+        .withVelocityX(strafeSpeed * -1)
+        .withRotationalRate(0)));
+  }
+
+
   private void configureBindings() {
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
     new Trigger(m_exampleSubsystem::exampleCondition)
         .onTrue(new ExampleCommand(m_exampleSubsystem));
+
+
+
     m_flywheelSubsystem.setDefaultCommand(new FlywheelSetSpeedCommand(m_flywheelSubsystem, m_ledSubsystem, () -> m_driverController.getY(), () -> m_driverController.getX()));
     enableTrigger.onTrue(new LedEnableCommand(m_ledSubsystem, 1).ignoringDisable(true));
     disableTrigger.whileTrue(new LedEnableCommand(m_ledSubsystem, 0).ignoringDisable(true));
