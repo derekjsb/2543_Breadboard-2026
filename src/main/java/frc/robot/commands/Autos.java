@@ -6,7 +6,7 @@ package frc.robot.commands;
 
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.FlywheelSubsystem;
-import frc.robot.subsystems.LedSubsystem;
+import frc.robot.subsystems.LEDSubsystem;
 
 import java.util.function.DoubleSupplier;
 
@@ -18,7 +18,7 @@ public final class Autos {
   public static Command exampleAuto(ExampleSubsystem subsystem) {
     return Commands.sequence(subsystem.exampleMethodCommand(), new ExampleCommand(subsystem));
   }
-  public static Command fwAuto(ExampleSubsystem subsystem, FlywheelSubsystem f_subsystem, LedSubsystem l_subsystem) {
+  public static Command fwAuto(ExampleSubsystem subsystem, FlywheelSubsystem f_subsystem, LEDSubsystem l_subsystem) {
     // return new FlywheelSetSpeedCommand(f_subsystem, l_subsystem, () -> 0.5, () -> 0.5);
     return Commands.sequence(new FlywheelSetSpeedCommand(f_subsystem, l_subsystem, () -> 0.5, () -> 0.5), 
     new FlywheelSetSpeedCommand(f_subsystem, l_subsystem, () -> -0.25, () -> 1),

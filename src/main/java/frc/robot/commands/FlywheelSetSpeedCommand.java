@@ -6,7 +6,8 @@ package frc.robot.commands;
 
 import frc.robot.Constants;
 import frc.robot.subsystems.FlywheelSubsystem;
-import frc.robot.subsystems.LedSubsystem;
+// import frc.robot.subsystems.LedSubsystem;
+import frc.robot.subsystems.LEDSubsystem;
 
 import java.util.function.DoubleSupplier;
 
@@ -20,7 +21,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 public class FlywheelSetSpeedCommand extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final FlywheelSubsystem m_subsystem;
-  private final LedSubsystem m_ledSubsystem;
+  // private final LedSubsystem m_ledSubsystem;
   private DoubleSupplier speed;
   private DoubleSupplier torque;
   private TalonFX flywheel;
@@ -34,9 +35,9 @@ public class FlywheelSetSpeedCommand extends Command {
    *
    * @param subsystem The subsystem used by this command.
    */
-  public FlywheelSetSpeedCommand(FlywheelSubsystem subsystem, LedSubsystem ledSubsystem, DoubleSupplier setSpeed, DoubleSupplier setTorque) {
+  public FlywheelSetSpeedCommand(FlywheelSubsystem subsystem, LEDSubsystem ledSubsystem, DoubleSupplier setSpeed, DoubleSupplier setTorque) {
     m_subsystem = subsystem;
-    m_ledSubsystem = ledSubsystem;
+    // m_ledSubsystem = ledSubsystem;
     speed = setSpeed;
     torque = setTorque;
     dcMultiplier = 125;
@@ -79,40 +80,40 @@ public class FlywheelSetSpeedCommand extends Command {
     flywheelTorqueCurrent = m_subsystem.getTorqueCurrent();
     flywheelVelocity = m_subsystem.getVelocity();
     SmartDashboard.putNumber("Flywheel Distance From Target", Math.abs(Math.abs(flywheelVelocity - (Math.abs(speed.getAsDouble()) * dcMultiplier))));
-    if (Math.abs(flywheelVelocity - (Math.abs(speed.getAsDouble()) * dcMultiplier)) < 4 && Math.abs(speed.getAsDouble()) > Preferences.getDouble(Constants.flywheelDeadbandKey, 0.01)) {
-      if (ledDebounce != -1) {
-        m_ledSubsystem.setFlashing(false, false);
-        m_ledSubsystem.setColor(9); // purple
-        ledDebounce = -1;
-      }
-    }
-    else if (flywheelTorqueCurrent < 1) {
-      if (ledDebounce != 0) {
-        m_ledSubsystem.resetColor();
-        ledDebounce = 0;
-      }
-    }
-    else if (flywheelTorqueCurrent < 8) {
-      if (ledDebounce != 1) {
-        m_ledSubsystem.setFlashing(false, false);
-        m_ledSubsystem.setColor(4); // green
-      }
-    ledDebounce = 1;
-    }
-    else if (flywheelTorqueCurrent < 12) {
-      if (ledDebounce != 2) {
-        m_ledSubsystem.setFlashing(true, false);
-        m_ledSubsystem.setColor(3); // yellow
-      ledDebounce = 2;
-      }
-      }
-    else if (flywheelTorqueCurrent < 16) {
-      if (ledDebounce != 3) {
-        m_ledSubsystem.setFlashing(true, false);
-        m_ledSubsystem.setColor(1); // red
-        ledDebounce = 3;
-      }
-      } 
+    // if (Math.abs(flywheelVelocity - (Math.abs(speed.getAsDouble()) * dcMultiplier)) < 4 && Math.abs(speed.getAsDouble()) > Preferences.getDouble(Constants.flywheelDeadbandKey, 0.01)) {
+    //   if (ledDebounce != -1) {
+    //     m_ledSubsystem.setFlashing(false, false);
+    //     m_ledSubsystem.setColor(9); // purple
+    //     ledDebounce = -1;
+    //   }
+    // }
+    // else if (flywheelTorqueCurrent < 1) {
+    //   if (ledDebounce != 0) {
+    //     m_ledSubsystem.resetColor();
+    //     ledDebounce = 0;
+    //   }
+    // }
+    // else if (flywheelTorqueCurrent < 8) {
+    //   if (ledDebounce != 1) {
+    //     m_ledSubsystem.setFlashing(false, false);
+    //     m_ledSubsystem.setColor(4); // green
+    //   }
+    // ledDebounce = 1;
+    // }
+    // else if (flywheelTorqueCurrent < 12) {
+    //   if (ledDebounce != 2) {
+    //     m_ledSubsystem.setFlashing(true, false);
+    //     m_ledSubsystem.setColor(3); // yellow
+    //   ledDebounce = 2;
+    //   }
+    //   }
+    // else if (flywheelTorqueCurrent < 16) {
+    //   if (ledDebounce != 3) {
+    //     m_ledSubsystem.setFlashing(true, false);
+    //     m_ledSubsystem.setColor(1); // red
+    //     ledDebounce = 3;
+    //   }
+    //   } 
   }
   // Called once the command ends or is interrupted.
   @Override

@@ -37,6 +37,28 @@ public final class Constants {
       public static final int STRAFE_RIGHT_BUTTON = 4;
     }
   }
+  public static final class COLORS
+  {
+    public static final int BLUE = 0;
+    public static final int RED = 1;
+    public static final int GREEN = 2;
+    public static final int CYAN = 3;
+    public static final int MAGENTA = 4;
+    public static final int YELLOW = 5;
+    public static final int TURQUOISE = 6;
+    public static final int VIOLET = 7;
+    public static final int ORANGE = 8;
+    public static final int SPRING_GREEN = 9;
+    public static final int OCEAN = 10;
+    public static final int RASSBERRY = 11;
+    public static final int WHITE = 12;
+  }
+  public static final class TIMER_CONSTANTS 
+  {
+    public static final int ENDGAME_SECONDS = 30;
+    public static final int ENDGAME_WARNING = 5;
+  }
+  
   public static final double disabledSeconds = 140;
   public static final double endgameSeconds = 30;
   public static final double endgameWarning = 5;
