@@ -21,11 +21,11 @@ public class LedSubsystem extends SubsystemBase {
   // local constants
   private static int ENABLED = 1;
   private static final int SOLID_MODE = 0;
-  private static final int FLASHING_MODE = 10;
-  private static final int PRE_ENDGAME_COLOR = 17;
-  private static final int SHIFT_ACTIVE_COLOR = 21;
-  private static final int SHIFT_INACTIVE_COLOR = 11;
-  private static final int ENDGAME_COLOR = 24;
+  private static final int FLASHING_MODE = 30;
+  private static final int PRE_ENDGAME_COLOR = 37;
+  private static final int SHIFT_ACTIVE_COLOR = 14;
+  private static final int SHIFT_INACTIVE_COLOR = 31;
+  private static final int ENDGAME_COLOR = 16;
 
   // color constants
   public static final class Color {
