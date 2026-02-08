@@ -65,17 +65,17 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledPeriodic() {
-    if (DriverStation.isFMSAttached()) {noFmsConstant = 0;} else {noFmsConstant = 1;}
-    double matchTime = DriverStation.getMatchTime();
-    if (matchTime > -1) {
-      SmartDashboard.putNumber("Match Time", matchTime);
-      }
-      else {
-        SmartDashboard.putNumber("Match Time", Constants.disabledSeconds);
-     }
-     SmartDashboard.putNumber("Shift Time", DriverStation.getMatchTime() + noFmsConstant);
-    m_robotContainer.hubActive = false;
-    SmartDashboard.putBoolean("Alliance Hub Active", m_robotContainer.hubActive);
+    // if (DriverStation.isFMSAttached()) {noFmsConstant = 0;} else {noFmsConstant = 1;}
+    // double matchTime = DriverStation.getMatchTime();
+    // if (matchTime > -1) {
+    //   SmartDashboard.putNumber("Match Time", matchTime);
+    //   }
+    //   else {
+    //     SmartDashboard.putNumber("Match Time", Constants.disabledSeconds);
+    //  }
+    //  SmartDashboard.putNumber("Shift Time", DriverStation.getMatchTime() + noFmsConstant);
+    // m_robotContainer.hubActive = false;
+    // SmartDashboard.putBoolean("Alliance Hub Active", m_robotContainer.hubActive);
   }
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
@@ -116,105 +116,105 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     double matchTime = DriverStation.getMatchTime();
     SmartDashboard.putNumber("Match Time", matchTime + noFmsConstant);
-    if(DriverStation.getGameSpecificMessage().length() > 0)
-{
+//     if(DriverStation.getGameSpecificMessage().length() > 0)
+// {
 
   double shiftTime = matchTime;
-  if (matchTime > Constants.ShiftEndConstants.transitionShift) {
+//   if (matchTime > Constants.ShiftEndConstants.transitionShift) {
     
-    SmartDashboard.putString(Constants.nextInactiveKey, DriverStation.getGameSpecificMessage());
-    m_robotContainer.shiftIndex = 0;
-    shiftTime = matchTime - Constants.ShiftEndConstants.transitionShift;
-  }
-  else if (matchTime > Constants.ShiftEndConstants.shift1) {
-    m_robotContainer.shiftIndex = 1;
-    shiftTime = matchTime - Constants.ShiftEndConstants.shift1;
-  }
-  else if (matchTime > Constants.ShiftEndConstants.shift2) {
-    m_robotContainer.shiftIndex = 2;
-    shiftTime = matchTime - Constants.ShiftEndConstants.shift2;
-  }
-  else if (matchTime > Constants.ShiftEndConstants.shift3) {
-    m_robotContainer.shiftIndex = 3;
-    shiftTime = matchTime - Constants.ShiftEndConstants.shift3;
-  }
-  else if (matchTime > Constants.ShiftEndConstants.shift4) {
-    m_robotContainer.shiftIndex = 4;
-    shiftTime = matchTime - Constants.ShiftEndConstants.shift4;
-  }
-  else if (matchTime < Constants.endgameSeconds) {
-    m_robotContainer.shiftIndex = 5;
-    shiftTime = matchTime;
-  }
-  SmartDashboard.putNumber("Shift Time", shiftTime + noFmsConstant);
-  m_robotContainer.hubTimer = shiftTime;
-  m_robotContainer.hubActive = true;
-  Optional<Alliance> ally = DriverStation.getAlliance();
-  switch (DriverStation.getGameSpecificMessage().charAt(0))
-  {
-    case 'B' :
-      //Blue case code
-      if (m_robotContainer.shiftIndex == 1 || m_robotContainer.shiftIndex == 3) {
-        SmartDashboard.putString(Constants.nextInactiveKey, "R");
-      }
-      else if (m_robotContainer.shiftIndex == 2 || m_robotContainer.shiftIndex == 4) {
-        SmartDashboard.putString(Constants.nextInactiveKey, "B");
-      }
-      else if (m_robotContainer.shiftIndex == 5) {
-        SmartDashboard.putString(Constants.nextInactiveKey, "N");
-      }
-      if (ally.isPresent()) {
-        if (ally.get() == Alliance.Red) {
-            if (m_robotContainer.shiftIndex == 2 || m_robotContainer.shiftIndex == 4) {
-              m_robotContainer.hubActive = false;
-            }
-        }
-        else {
-          if (m_robotContainer.shiftIndex == 1 || m_robotContainer.shiftIndex == 3) {
-            m_robotContainer.hubActive = false;
-          }
-        }
-    }
-      break;
-    case 'R' :
-      //Red case code
-      if (m_robotContainer.shiftIndex == 1 || m_robotContainer.shiftIndex == 3) {
-        SmartDashboard.putString(Constants.nextInactiveKey, "B");
-      }
-      else if (m_robotContainer.shiftIndex == 2 || m_robotContainer.shiftIndex == 4) {
-        SmartDashboard.putString(Constants.nextInactiveKey, "R");
-      }
-      else if (m_robotContainer.shiftIndex == 5) {
-        SmartDashboard.putString(Constants.nextInactiveKey, "N");
-      }
-      if (ally.isPresent()) {
-        if (ally.get() == Alliance.Red) {
-            if (m_robotContainer.shiftIndex == 1 || m_robotContainer.shiftIndex == 3) {
-              m_robotContainer.hubActive = false;
-            }
-        }
-        else {
-          if (m_robotContainer.shiftIndex == 2 || m_robotContainer.shiftIndex == 4) {
-            m_robotContainer.hubActive = false;
-          }
-        }
-      }
-      break;
-    default :
-      m_robotContainer.hubActive = true;
-      //This is corrupt data
-      break;
-  }
-} else {
-  //Code for no data received yet
-  SmartDashboard.putNumber("Shift Time", matchTime);
-  SmartDashboard.putString(Constants.nextInactiveKey, "N");
-  m_robotContainer.hubActive = true;
-}
-SmartDashboard.putBoolean("Alliance Hub Active", m_robotContainer.hubActive);
-    // if (matchTime <= Constants.endgameSeconds) {
+//     SmartDashboard.putString(Constants.nextInactiveKey, DriverStation.getGameSpecificMessage());
+//     m_robotContainer.shiftIndex = 0;
+//     shiftTime = matchTime - Constants.ShiftEndConstants.transitionShift;
+//   }
+//   else if (matchTime > Constants.ShiftEndConstants.shift1) {
+//     m_robotContainer.shiftIndex = 1;
+//     shiftTime = matchTime - Constants.ShiftEndConstants.shift1;
+//   }
+//   else if (matchTime > Constants.ShiftEndConstants.shift2) {
+//     m_robotContainer.shiftIndex = 2;
+//     shiftTime = matchTime - Constants.ShiftEndConstants.shift2;
+//   }
+//   else if (matchTime > Constants.ShiftEndConstants.shift3) {
+//     m_robotContainer.shiftIndex = 3;
+//     shiftTime = matchTime - Constants.ShiftEndConstants.shift3;
+//   }
+//   else if (matchTime > Constants.ShiftEndConstants.shift4) {
+//     m_robotContainer.shiftIndex = 4;
+//     shiftTime = matchTime - Constants.ShiftEndConstants.shift4;
+//   }
+//   else if (matchTime < Constants.endgameSeconds) {
+//     m_robotContainer.shiftIndex = 5;
+//     shiftTime = matchTime;
+//   }
+//   SmartDashboard.putNumber("Shift Time", shiftTime + noFmsConstant);
+//   m_robotContainer.hubTimer = shiftTime;
+//   m_robotContainer.hubActive = true;
+//   Optional<Alliance> ally = DriverStation.getAlliance();
+//   switch (DriverStation.getGameSpecificMessage().charAt(0))
+//   {
+//     case 'B' :
+//       //Blue case code
+//       if (m_robotContainer.shiftIndex == 1 || m_robotContainer.shiftIndex == 3) {
+//         SmartDashboard.putString(Constants.nextInactiveKey, "R");
+//       }
+//       else if (m_robotContainer.shiftIndex == 2 || m_robotContainer.shiftIndex == 4) {
+//         SmartDashboard.putString(Constants.nextInactiveKey, "B");
+//       }
+//       else if (m_robotContainer.shiftIndex == 5) {
+//         SmartDashboard.putString(Constants.nextInactiveKey, "N");
+//       }
+//       if (ally.isPresent()) {
+//         if (ally.get() == Alliance.Red) {
+//             if (m_robotContainer.shiftIndex == 2 || m_robotContainer.shiftIndex == 4) {
+//               m_robotContainer.hubActive = false;
+//             }
+//         }
+//         else {
+//           if (m_robotContainer.shiftIndex == 1 || m_robotContainer.shiftIndex == 3) {
+//             m_robotContainer.hubActive = false;
+//           }
+//         }
+//     }
+//       break;
+//     case 'R' :
+//       //Red case code
+//       if (m_robotContainer.shiftIndex == 1 || m_robotContainer.shiftIndex == 3) {
+//         SmartDashboard.putString(Constants.nextInactiveKey, "B");
+//       }
+//       else if (m_robotContainer.shiftIndex == 2 || m_robotContainer.shiftIndex == 4) {
+//         SmartDashboard.putString(Constants.nextInactiveKey, "R");
+//       }
+//       else if (m_robotContainer.shiftIndex == 5) {
+//         SmartDashboard.putString(Constants.nextInactiveKey, "N");
+//       }
+//       if (ally.isPresent()) {
+//         if (ally.get() == Alliance.Red) {
+//             if (m_robotContainer.shiftIndex == 1 || m_robotContainer.shiftIndex == 3) {
+//               m_robotContainer.hubActive = false;
+//             }
+//         }
+//         else {
+//           if (m_robotContainer.shiftIndex == 2 || m_robotContainer.shiftIndex == 4) {
+//             m_robotContainer.hubActive = false;
+//           }
+//         }
+//       }
+//       break;
+//     default :
+//       m_robotContainer.hubActive = true;
+//       //This is corrupt data
+//       break;
+//   }
+// } else {
+//   //Code for no data received yet
+//   SmartDashboard.putNumber("Shift Time", matchTime);
+//   SmartDashboard.putString(Constants.nextInactiveKey, "N");
+//   m_robotContainer.hubActive = true;
+// }
+// SmartDashboard.putBoolean("Alliance Hub Active", m_robotContainer.hubActive);
+//     // if (matchTime <= Constants.endgameSeconds) {
 
-    // }
+//     // }
   }
 
   @Override

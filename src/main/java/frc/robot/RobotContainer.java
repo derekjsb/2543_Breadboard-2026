@@ -17,6 +17,7 @@ import frc.robot.Constants.ButtonIndex.DriverLeft;
 import frc.robot.Constants.ButtonIndex.DriverRight;
 import frc.robot.Constants.COLORS;
 import frc.robot.commands.Autos;
+import frc.robot.commands.BangBangCommand;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.ExampleSubsystem;
@@ -77,23 +78,23 @@ public class RobotContainer {
   // private final Trigger turretResetTrigger = new Trigger(() -> (!m_limitSwitch.get()));
 
 
-  private final Joystick operatorLeftStick;
-  private final Joystick operatorRightStick;
-  private final Joystick driverLeftStick;
-  private final Joystick driverRightStick;
+  // private final Joystick operatorLeftStick;
+  // private final Joystick operatorRightStick;
+  // private final Joystick driverLeftStick;
+  // private final Joystick driverRightStick;
   private double MaxSpeed;
   private double MaxAngularRate;
-  private final SwerveRequest.FieldCentric drive;
-  private final SwerveRequest.RobotCentric strafe;
-  private final Telemetry logger;
-  public final CommandSwerveDrivetrain drivetrain;
+  // private final SwerveRequest.FieldCentric drive;
+  // private final SwerveRequest.RobotCentric strafe;
+  // private final Telemetry logger;
+  // public final CommandSwerveDrivetrain drivetrain;
 
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   // private final CommandXboxController m_driverController =
   //     new CommandXboxController(OperatorConstants.kDriverControllerPort);
-  // private final Joystick m_driverController =
-  //     new Joystick(OperatorConstants.kDriverControllerPort);
+  private final Joystick m_driverController =
+      new Joystick(OperatorConstants.kDriverControllerPort);
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
@@ -102,24 +103,24 @@ public class RobotContainer {
     disableTrigger = new Trigger(DriverStation::isDisabled);
     preEndgameTrigger = new Trigger(() -> (isEndgame(TIMER_CONSTANTS.ENDGAME_WARNING)));
     endgameTrigger = new Trigger(() -> (isEndgame(0)));
-    operatorLeftStick = new Joystick(JoystickChannels.OPERATOR_LEFT_JOYSTICK);
-    operatorRightStick = new Joystick(JoystickChannels.OPERATOR_RIGHT_JOYSTICK);
-    driverLeftStick = new Joystick(JoystickChannels.DRIVER_LEFT_JOYSTICK);
-    driverRightStick = new Joystick(JoystickChannels.DRIVER_RIGHT_JOYSTICK);
+    // operatorLeftStick = new Joystick(JoystickChannels.OPERATOR_LEFT_JOYSTICK);
+    // operatorRightStick = new Joystick(JoystickChannels.OPERATOR_RIGHT_JOYSTICK);
+    // driverLeftStick = new Joystick(JoystickChannels.DRIVER_LEFT_JOYSTICK);
+    // driverRightStick = new Joystick(JoystickChannels.DRIVER_RIGHT_JOYSTICK);
     
     // swerve system
     MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
     MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
-    drive = new SwerveRequest.FieldCentric()
-      .withDeadband(MaxSpeed * 0.05).withRotationalDeadband(MaxAngularRate * 0.05) 
-      .withDriveRequestType(DriveRequestType.OpenLoopVoltage); 
-    strafe = new SwerveRequest.RobotCentric()
-      .withDriveRequestType(DriveRequestType.OpenLoopVoltage);
-    logger = new Telemetry(MaxSpeed);
-    drivetrain = TunerConstants.createDrivetrain();
+    // drive = new SwerveRequest.FieldCentric()
+    //   .withDeadband(MaxSpeed * 0.05).withRotationalDeadband(MaxAngularRate * 0.05) 
+    //   .withDriveRequestType(DriveRequestType.OpenLoopVoltage); 
+    // strafe = new SwerveRequest.RobotCentric()
+    //   .withDriveRequestType(DriveRequestType.OpenLoopVoltage);
+    // logger = new Telemetry(MaxSpeed);
+    // drivetrain = TunerConstants.createDrivetrain();
     Settings.Init();
-configureSwerveBindings();
-triggerBinding();
+// configureSwerveBindings();
+// triggerBinding();
     configureBindings();
   }
 
@@ -134,70 +135,70 @@ triggerBinding();
    */
 
    // check for precision or turbo mode
-private double getSpeedFactor() {
-    double speedFactor = 1;
-    if (driverRightStick.getRawButton(DriverRight.PRECISION_MODE_BUTTON)) {
-      speedFactor =  Settings.getSwervePrecisionFactor();
-    } else if (!driverLeftStick.getRawButton(DriverLeft.TURBO_MODE_BUTTON)) {
-      speedFactor = Settings.getSwerveSpeedFactor();
-    } 
-    return MaxSpeed * speedFactor;
-  }
+// private double getSpeedFactor() {
+//     double speedFactor = 1;
+//     if (driverRightStick.getRawButton(DriverRight.PRECISION_MODE_BUTTON)) {
+//       speedFactor =  Settings.getSwervePrecisionFactor();
+//     } else if (!driverLeftStick.getRawButton(DriverLeft.TURBO_MODE_BUTTON)) {
+//       speedFactor = Settings.getSwerveSpeedFactor();
+//     } 
+//     return MaxSpeed * speedFactor;
+//   }
 
-private void configureSwerveBindings() {
+// private void configureSwerveBindings() {
       
-    // drive system  
-    drivetrain.setDefaultCommand(
-          drivetrain.applyRequest(() ->
-              drive
-                .withVelocityX(-driverLeftStick.getY() * getSpeedFactor()) 
-                .withVelocityY(-driverLeftStick.getX() * getSpeedFactor()) 
-                .withRotationalRate(-driverRightStick.getZ() * getSpeedFactor()) 
-          )
-      );
-      final var idle = new SwerveRequest.Idle();
-      RobotModeTriggers.disabled().whileTrue(
-          drivetrain.applyRequest(() -> idle).ignoringDisable(true)
-      );
-      drivetrain.registerTelemetry(logger::telemeterize);
+//     // drive system  
+//     drivetrain.setDefaultCommand(
+//           drivetrain.applyRequest(() ->
+//               drive
+//                 .withVelocityX(-driverLeftStick.getY() * getSpeedFactor()) 
+//                 .withVelocityY(-driverLeftStick.getX() * getSpeedFactor()) 
+//                 .withRotationalRate(-driverRightStick.getZ() * getSpeedFactor()) 
+//           )
+//       );
+//       final var idle = new SwerveRequest.Idle();
+//       RobotModeTriggers.disabled().whileTrue(
+//           drivetrain.applyRequest(() -> idle).ignoringDisable(true)
+//       );
+//       drivetrain.registerTelemetry(logger::telemeterize);
 
-SmartDashboard.putData("Swerve Drive", new Sendable() {
-  @Override
-  public void initSendable(SendableBuilder builder) {
-    builder.setSmartDashboardType("SwerveDrive");
+// SmartDashboard.putData("Swerve Drive", new Sendable() {
+//   @Override
+//   public void initSendable(SendableBuilder builder) {
+//     builder.setSmartDashboardType("SwerveDrive");
 
-    builder.addDoubleProperty("Front Left Angle", () -> drivetrain.getModule(0).getPosition(true).angle.getRadians(), null);
-    builder.addDoubleProperty("Front Left Velocity", () -> drivetrain.getModule(0).getDriveMotor().getVelocity(true).getValueAsDouble(), null);
+//     builder.addDoubleProperty("Front Left Angle", () -> drivetrain.getModule(0).getPosition(true).angle.getRadians(), null);
+//     builder.addDoubleProperty("Front Left Velocity", () -> drivetrain.getModule(0).getDriveMotor().getVelocity(true).getValueAsDouble(), null);
 
-    builder.addDoubleProperty("Front Right Angle", () -> drivetrain.getModule(1).getPosition(true).angle.getRadians(), null);
-    builder.addDoubleProperty("Front Right Velocity", () -> drivetrain.getModule(1).getDriveMotor().getVelocity(true).getValueAsDouble(), null);
+//     builder.addDoubleProperty("Front Right Angle", () -> drivetrain.getModule(1).getPosition(true).angle.getRadians(), null);
+//     builder.addDoubleProperty("Front Right Velocity", () -> drivetrain.getModule(1).getDriveMotor().getVelocity(true).getValueAsDouble(), null);
 
-    builder.addDoubleProperty("Back Left Angle", () -> drivetrain.getModule(2).getPosition(true).angle.getRadians(), null);
-    builder.addDoubleProperty("Back Left Velocity", () -> drivetrain.getModule(2).getDriveMotor().getVelocity(true).getValueAsDouble(), null);
+//     builder.addDoubleProperty("Back Left Angle", () -> drivetrain.getModule(2).getPosition(true).angle.getRadians(), null);
+//     builder.addDoubleProperty("Back Left Velocity", () -> drivetrain.getModule(2).getDriveMotor().getVelocity(true).getValueAsDouble(), null);
 
-    builder.addDoubleProperty("Back Right Angle", () -> drivetrain.getModule(3).getPosition(true).angle.getRadians(), null);
-    builder.addDoubleProperty("Back Right Velocity", () -> drivetrain.getModule(3).getDriveMotor().getVelocity(true).getValueAsDouble(), null);
+//     builder.addDoubleProperty("Back Right Angle", () -> drivetrain.getModule(3).getPosition(true).angle.getRadians(), null);
+//     builder.addDoubleProperty("Back Right Velocity", () -> drivetrain.getModule(3).getDriveMotor().getVelocity(true).getValueAsDouble(), null);
 
-    builder.addDoubleProperty("Robot Angle", () -> drivetrain.getState().RawHeading.getRadians(), null);
-  }
-});
+//     builder.addDoubleProperty("Robot Angle", () -> drivetrain.getState().RawHeading.getRadians(), null);
+//   }
+// });
 
-      // pigeon reset
-      new JoystickButton(driverRightStick, 4).onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
+//       // pigeon reset
+//       new JoystickButton(driverRightStick, 4).onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
-      // strafe right
-      double strafeSpeed = Settings.getSwerveStrafeSpeed();
-      new JoystickButton(driverLeftStick, 4).whileTrue(drivetrain.applyRequest(() -> strafe
-        .withVelocityY(0)
-        .withVelocityX(strafeSpeed)
-        .withRotationalRate(0)));
+//       // strafe right
+//       double strafeSpeed = Settings.getSwerveStrafeSpeed();
+//       new JoystickButton(driverLeftStick, 4).whileTrue(drivetrain.applyRequest(() -> strafe
+//         .withVelocityY(0)
+//         .withVelocityX(strafeSpeed)
+//         .withRotationalRate(0)));
 
-      // strafe left
-      new JoystickButton(driverLeftStick, 3).whileTrue(drivetrain.applyRequest(() -> strafe
-        .withVelocityY(0)
-        .withVelocityX(strafeSpeed * -1)
-        .withRotationalRate(0)));
-  }
+//       // strafe left
+//       new JoystickButton(driverLeftStick, 3).whileTrue(drivetrain.applyRequest(() -> strafe
+//         .withVelocityY(0)
+//         .withVelocityX(strafeSpeed * -1)
+//         .withRotationalRate(0)));
+//   }
 
 private boolean isEndgame(int warning)
   {
@@ -253,6 +254,8 @@ private boolean isEndgame(int warning)
     // new JoystickButton(m_driverController, 6).onTrue(new LedColorCommand(m_ledSubsystem,2, 6,true));
     // new JoystickButton(m_driverController, 7).onTrue(new LedColorCommand(m_ledSubsystem,3, 6,false));
     // new JoystickButton(m_driverController, 8).onTrue(new LedColorCommand(m_ledSubsystem,3, 6,true));
+    new JoystickButton(m_driverController, 3).onTrue(new BangBangCommand(m_flywheelSubsystem, 4000));
+    new JoystickButton(m_driverController, 4).onTrue(new BangBangCommand(m_flywheelSubsystem, 6000));
 
     // turretResetTrigger.onTrue(new TurretResetCommand(m_turretSubsystem).ignoringDisable(true));
 

@@ -13,7 +13,9 @@ import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
+import com.ctre.phoenix6.controls.PositionDutyCycle;
 import com.ctre.phoenix6.controls.TorqueCurrentFOC;
+import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
@@ -82,12 +84,24 @@ public class FlywheelSubsystem extends SubsystemBase {
 
     // System.out.println(speed);
   }
+
+public void setBangBangTorque(double torque) {
+  flywheel.setControl(new TorqueCurrentFOC(torque));
+}
+public void setBangBangVoltage(double voltage) {
+  flywheel.setControl(new VoltageOut(voltage));
+}
+
+public void setPosition(double pos) {
+  flywheel.setControl(new PositionDutyCycle(pos));
+}
+
   public void setConfiguration() {
    var currentLimitConfig = new CurrentLimitsConfigs()
       .withStatorCurrentLimitEnable(true)
-      .withStatorCurrentLimit(Preferences.getDouble(Constants.maxTorqueKey, 30))
+      .withStatorCurrentLimit(Preferences.getDouble(Constants.maxTorqueKey, 15))
       .withSupplyCurrentLimitEnable(true)
-      .withSupplyCurrentLimit(Preferences.getDouble(Constants.maxTorqueKey, 30));
+      .withSupplyCurrentLimit(Preferences.getDouble(Constants.maxTorqueKey, 10));
 
     var motorOutputConfig = new MotorOutputConfigs()
       .withInverted(InvertedValue.CounterClockwise_Positive)
@@ -97,11 +111,11 @@ public class FlywheelSubsystem extends SubsystemBase {
       .withGravityType(GravityTypeValue.Elevator_Static)
       .withKA(0)
       .withKG(0.0)
-      .withKP(0.0)
-      .withKI(0.0)
-      .withKS(0.0)
+      .withKP(0.4)
+      .withKI(0.03)
+      .withKS(0.02)
       .withKV(0.0)
-      .withKD(0.0);
+      .withKD(0.01);
 
     var talonFXConfig = new TalonFXConfiguration()
       .withMotorOutput(motorOutputConfig)

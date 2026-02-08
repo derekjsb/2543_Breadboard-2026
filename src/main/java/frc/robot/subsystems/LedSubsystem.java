@@ -29,7 +29,7 @@ public class LEDSubsystem extends SubsystemBase {
   public LEDSubsystem() {
     arduino = new I2C(I2C.Port.kOnboard, 0x08);
     arduino.write(ADDRESS_STATUS, ENABLED);
-    setEnabled(true);
+    setEnabled(false);
     setAllianceColor();
     mode = SOLID_MODE;
     shiftColor = -1;
@@ -88,6 +88,7 @@ public class LEDSubsystem extends SubsystemBase {
   public void setColor(int color) {
     currentColor = color;
     color = color + mode;
+    setDashboardColor();
     arduino.write(ADDRESS_COLOR, color);
   }
 
