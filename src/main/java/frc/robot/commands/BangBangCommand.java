@@ -4,9 +4,16 @@
 
 package frc.robot.commands;
 
+import frc.robot.Constants;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.FlywheelSubsystem;
+
+// import java.util.prefs.Preferences;
+
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj.Preferences;
 
 /** An example command that uses an example subsystem. */
 public class BangBangCommand extends Command {
@@ -14,6 +21,7 @@ public class BangBangCommand extends Command {
   private final FlywheelSubsystem m_subsystem;
   private double speedSetPoint;
   private boolean speedReady;
+  private double nominalCurrent;
 
   /**
    * Creates a new ExampleCommand.
@@ -24,6 +32,8 @@ public class BangBangCommand extends Command {
     m_subsystem = subsystem;
     speedSetPoint = speed/60;
     speedReady = false;
+    Preferences.initDouble("BangBang Nominal Current", 20);
+    nominalCurrent = Preferences.getDouble("BangBang Nominal Current", 20);
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
   }
@@ -31,6 +41,7 @@ public class BangBangCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    nominalCurrent = Preferences.getDouble("BangBang Nominal Current", 20);
     m_subsystem.setBangBangVoltage(16);
   }
 
@@ -41,12 +52,10 @@ public class BangBangCommand extends Command {
     if (speedReady) {
       System.out.println(m_subsystem.getVelocity() - speedSetPoint);
       if (m_subsystem.getVelocity() < speedSetPoint) {
-        m_subsystem.setBangBangTorque(10);
-        System.out.println("current 40a");
+        m_subsystem.setBangBangTorque(nominalCurrent);
       }
       else {
         m_subsystem.setBangBangTorque(0);
-        System.out.println("current 0a");
       }
     }
     else {
@@ -61,6 +70,10 @@ public class BangBangCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    if (speedSetPoint < 1 || DriverStation.isDisabled()) {
+      m_subsystem.setBangBangVoltage(0);
+      return true;
+    }
     return false;
   }
 }

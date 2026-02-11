@@ -254,8 +254,11 @@ private boolean isEndgame(int warning)
     // new JoystickButton(m_driverController, 6).onTrue(new LedColorCommand(m_ledSubsystem,2, 6,true));
     // new JoystickButton(m_driverController, 7).onTrue(new LedColorCommand(m_ledSubsystem,3, 6,false));
     // new JoystickButton(m_driverController, 8).onTrue(new LedColorCommand(m_ledSubsystem,3, 6,true));
-    new JoystickButton(m_driverController, 3).onTrue(new BangBangCommand(m_flywheelSubsystem, 4000));
-    new JoystickButton(m_driverController, 4).onTrue(new BangBangCommand(m_flywheelSubsystem, 6000));
+    new JoystickButton(m_driverController, 1).onTrue(new BangBangCommand(m_flywheelSubsystem, Preferences.getDouble("BangBang Nominal Current", 20)));
+    new JoystickButton(m_driverController, 5).onTrue(new BangBangCommand(m_flywheelSubsystem, 0));
+    new JoystickButton(m_driverController, 3).onTrue(new BangBangCommand(m_flywheelSubsystem, 2000));
+    new JoystickButton(m_driverController, 4).onTrue(new BangBangCommand(m_flywheelSubsystem, 4000));
+    new JoystickButton(m_driverController, 6).onTrue(new BangBangCommand(m_flywheelSubsystem, 5500));
 
     // turretResetTrigger.onTrue(new TurretResetCommand(m_turretSubsystem).ignoringDisable(true));
 
