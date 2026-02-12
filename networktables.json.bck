@@ -1,0 +1,42 @@
+[
+  {
+    "name": "/Preferences/FOCFlywheelDeadband",
+    "type": "double",
+    "value": 0.05,
+    "properties": {
+      "persistent": true
+    }
+  },
+  {
+    "name": "/Preferences/MaxFOCTorque",
+    "type": "double",
+    "value": 20.0,
+    "properties": {
+      "persistent": true
+    }
+  },
+  {
+    "name": "/Preferences/Use TorqueCurrentFOC",
+    "type": "boolean",
+    "value": true,
+    "properties": {
+      "persistent": true
+    }
+  },
+  {
+    "name": "/Preferences/Flywheel ID",
+    "type": "double",
+    "value": 25.0,
+    "properties": {
+      "persistent": true
+    }
+  },
+  {
+    "name": "/Preferences/Motor Default",
+    "type": "string",
+    "value": "Kraken X44",
+    "properties": {
+      "persistent": true
+    }
+  }
+]

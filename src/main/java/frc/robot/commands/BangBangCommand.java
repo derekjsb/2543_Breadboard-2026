@@ -48,9 +48,7 @@ public class BangBangCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // System.out.println(speedSetPoint-m_subsystem.getVelocity());
     if (speedReady) {
-      System.out.println(m_subsystem.getVelocity() - speedSetPoint);
       if (m_subsystem.getVelocity() < speedSetPoint) {
         m_subsystem.setBangBangTorque(nominalCurrent);
       }

@@ -22,15 +22,13 @@ import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.commands.FlywheelSetSpeedCommand;
-import frc.robot.commands.ManageShiftColors;
+import frc.robot.commands.ShiftColorsCommand;
 // import frc.robot.commands.LedColorCommand;
 // import frc.robot.commands.LedEnableCommand;
-import frc.robot.commands.TurretResetCommand;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.FlywheelSubsystem;
 import frc.robot.subsystems.LEDSubsystem;
 // import frc.robot.subsystems.LedSubsystem;
-import frc.robot.subsystems.TurretSubsystem;
 
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
@@ -47,7 +45,8 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.Constants.TIMER_CONSTANTS;;
+import frc.robot.Constants.TIMER_CONSTANTS;
+import frc.robot.Constants.TIMES;;
 
 // import java.util.prefs.Preferences;
 
@@ -63,11 +62,11 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final FlywheelSubsystem m_flywheelSubsystem = new FlywheelSubsystem();
-  private final LEDSubsystem m_ledSubsystem = new LEDSubsystem();
-  private final TurretSubsystem m_turretSubsystem = new TurretSubsystem();
+  private final LEDSubsystem LEDSub = new LEDSubsystem();
+  private final Trigger autonomousTrigger;
   private final Trigger enableTrigger;
   private final Trigger disableTrigger;
-  private final Trigger preEndgameTrigger;
+  private final Trigger endgameWarningTrigger;
   private final Trigger endgameTrigger;
   public int shiftIndex =  0;
   public boolean hubActive = true;
@@ -84,10 +83,10 @@ public class RobotContainer {
   // private final Joystick driverRightStick;
   private double MaxSpeed;
   private double MaxAngularRate;
-  // private final SwerveRequest.FieldCentric drive;
-  // private final SwerveRequest.RobotCentric strafe;
-  // private final Telemetry logger;
-  // public final CommandSwerveDrivetrain drivetrain;
+  private final SwerveRequest.FieldCentric drive;
+  private final SwerveRequest.RobotCentric strafe;
+  private final Telemetry logger;
+  public final CommandSwerveDrivetrain drivetrain;
 
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
@@ -99,10 +98,12 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the trigger bindings
     // initi create joysticks
-    enableTrigger = new Trigger(DriverStation::isTeleopEnabled);
-    disableTrigger = new Trigger(DriverStation::isDisabled);
-    preEndgameTrigger = new Trigger(() -> (isEndgame(TIMER_CONSTANTS.ENDGAME_WARNING)));
-    endgameTrigger = new Trigger(() -> (isEndgame(0)));
+    // triggers
+    autonomousTrigger = new Trigger(RobotModeTriggers.autonomous());    
+    enableTrigger = new Trigger(RobotModeTriggers.teleop());
+    disableTrigger = new Trigger(RobotModeTriggers.disabled());
+    endgameWarningTrigger = new Trigger(() -> (LEDSub.isEndgame(TIMES.FLASH_WARNING)));
+    endgameTrigger = new Trigger(() -> (LEDSub.isEndgame(0)));
     // operatorLeftStick = new Joystick(JoystickChannels.OPERATOR_LEFT_JOYSTICK);
     // operatorRightStick = new Joystick(JoystickChannels.OPERATOR_RIGHT_JOYSTICK);
     // driverLeftStick = new Joystick(JoystickChannels.DRIVER_LEFT_JOYSTICK);
@@ -111,16 +112,17 @@ public class RobotContainer {
     // swerve system
     MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
     MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
-    // drive = new SwerveRequest.FieldCentric()
-    //   .withDeadband(MaxSpeed * 0.05).withRotationalDeadband(MaxAngularRate * 0.05) 
-    //   .withDriveRequestType(DriveRequestType.OpenLoopVoltage); 
-    // strafe = new SwerveRequest.RobotCentric()
-    //   .withDriveRequestType(DriveRequestType.OpenLoopVoltage);
-    // logger = new Telemetry(MaxSpeed);
-    // drivetrain = TunerConstants.createDrivetrain();
+    drive = new SwerveRequest.FieldCentric()
+      .withDeadband(MaxSpeed * 0.05).withRotationalDeadband(MaxAngularRate * 0.05) 
+      .withDriveRequestType(DriveRequestType.OpenLoopVoltage); 
+    strafe = new SwerveRequest.RobotCentric()
+      .withDriveRequestType(DriveRequestType.OpenLoopVoltage);
+    logger = new Telemetry(MaxSpeed);
+    drivetrain = TunerConstants.createDrivetrain();
     Settings.Init();
-// configureSwerveBindings();
-// triggerBinding();
+    // configureSwerveBindings();
+    setupDashboard();
+    triggerBinding();
     configureBindings();
   }
 
@@ -200,6 +202,15 @@ public class RobotContainer {
 //         .withRotationalRate(0)));
 //   }
 
+private void setupDashboard() {
+  SmartDashboard.putNumber("Hood Position", 45);
+  SmartDashboard.putNumber("Elevator Position", 25); // 
+  SmartDashboard.putString("Turret State", "AUTO"); // in large text
+  SmartDashboard.putNumber("Turret Angle", 60); // in gyro
+  SmartDashboard.putNumber("Turret Angle to Hub", 60); // in gyro
+  SmartDashboard.putNumber("Turret Distance to Hub", 90); // in number bar
+}
+
 private boolean isEndgame(int warning)
   {
     return DriverStation.getMatchTime() <= TIMER_CONSTANTS.ENDGAME_SECONDS + warning 
@@ -208,25 +219,41 @@ private boolean isEndgame(int warning)
   }  
 
   private void triggerBinding() {
-    
-    enableTrigger.onTrue(Commands.sequence(
-      m_ledSubsystem.runOnce(() -> m_ledSubsystem.setEnabled(true)),
-      m_ledSubsystem.runOnce(() -> m_ledSubsystem.resetColor()),
-      m_ledSubsystem.runOnce(() -> m_ledSubsystem.setFlashing(false)),
-      new ManageShiftColors(m_ledSubsystem)
+
+    // go alliance color duing auto
+    autonomousTrigger.onTrue(
+      Commands.sequence(
+        LEDSub.runOnce(() -> LEDSub.setEnabled(true)),
+        LEDSub.runOnce(() -> LEDSub.setAllianceColor()),
+        LEDSub.runOnce(() -> LEDSub.setFlashing(false))
       )
     );
 
-    disableTrigger.onTrue(m_ledSubsystem.runOnce(() -> m_ledSubsystem.setEnabled(false)).ignoringDisable(true));
+    // handle shifts during teleop
+    enableTrigger.onTrue(new ShiftColorsCommand(LEDSub));
 
-    preEndgameTrigger.onTrue(Commands.sequence(
-      m_ledSubsystem.runOnce(() -> m_ledSubsystem.setColor(COLORS.GREEN)),
-      m_ledSubsystem.runOnce(() -> m_ledSubsystem.setFlashing(true))
-    ));
+    // go to default light show
+    disableTrigger.onTrue(
+      LEDSub.runOnce(() -> LEDSub.setEnabled(false)).ignoringDisable(true)
+    );
 
-    endgameTrigger.onTrue(Commands.sequence(
-      m_ledSubsystem.runOnce(() -> m_ledSubsystem.setFlashing(false))
-    ));
+    // falsh endgame warning
+    endgameWarningTrigger.onTrue(
+      Commands.sequence(
+        LEDSub.runOnce(() -> LEDSub.setEnabled(true)),
+        LEDSub.runOnce(() -> LEDSub.setColor(COLORS.GREEN)),
+        LEDSub.runOnce(() -> LEDSub.setFlashing(true))
+      )
+
+    );
+
+    // endgame color change
+    endgameTrigger.onTrue(
+      Commands.sequence(
+        LEDSub.runOnce(() -> LEDSub.setDashboardColor()),
+        LEDSub.runOnce(() -> LEDSub.setFlashing(false))
+      )
+    );
     
   }
 
@@ -235,25 +262,6 @@ private boolean isEndgame(int warning)
     new Trigger(m_exampleSubsystem::exampleCondition)
         .onTrue(new ExampleCommand(m_exampleSubsystem));
 
-
-
-    // m_flywheelSubsystem.setDefaultCommand(new FlywheelSetSpeedCommand(m_flywheelSubsystem, m_ledSubsystem, () -> m_driverController.getY(), () -> m_driverController.getX()));
-    // enableTrigger.onTrue(new LedEnableCommand(m_ledSubsystem, 1).ignoringDisable(true));
-    // disableTrigger.whileTrue(new LedEnableCommand(m_ledSubsystem, 0).ignoringDisable(true));
-    // shiftStartTrigger.onTrue(new LedEnableCommand(m_ledSubsystem, 2).ignoringDisable(true));
-    // shiftPreEndTrigger.onTrue(new LedEnableCommand(m_ledSubsystem, 3).ignoringDisable(true));
-    // preEndgameTrigger.onTrue(new LedEnableCommand(m_ledSubsystem, 3).ignoringDisable(true));
-    // endgameTrigger.onTrue(new LedEnableCommand(m_ledSubsystem, 4).ignoringDisable(true));
-    // new JoystickButton(m_driverController, 9).onTrue(new LedEnableCommand(m_ledSubsystem, 0).ignoringDisable(true));
-    // new JoystickButton(m_driverController, 10).onTrue(new LedEnableCommand(m_ledSubsystem, 1).ignoringDisable(true));
-    // new JoystickButton(m_driverController, 1).onTrue(new LedColorCommand(m_ledSubsystem,1, 2,false));
-    // new JoystickButton(m_driverController, 2).onTrue(new LedColorCommand(m_ledSubsystem,1, 3,false));
-    // new JoystickButton(m_driverController, 3).onTrue(new LedColorCommand(m_ledSubsystem,1, 4,false));
-    // new JoystickButton(m_driverController, 4).onTrue(new LedColorCommand(m_ledSubsystem,1, 5,false));
-    // new JoystickButton(m_driverController, 5).onTrue(new LedColorCommand(m_ledSubsystem,2, 6,false));
-    // new JoystickButton(m_driverController, 6).onTrue(new LedColorCommand(m_ledSubsystem,2, 6,true));
-    // new JoystickButton(m_driverController, 7).onTrue(new LedColorCommand(m_ledSubsystem,3, 6,false));
-    // new JoystickButton(m_driverController, 8).onTrue(new LedColorCommand(m_ledSubsystem,3, 6,true));
     new JoystickButton(m_driverController, 1).onTrue(new BangBangCommand(m_flywheelSubsystem, Preferences.getDouble("BangBang Nominal Current", 20)));
     new JoystickButton(m_driverController, 5).onTrue(new BangBangCommand(m_flywheelSubsystem, 0));
     new JoystickButton(m_driverController, 3).onTrue(new BangBangCommand(m_flywheelSubsystem, 2000));
@@ -276,7 +284,7 @@ private boolean isEndgame(int warning)
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
     if (SmartDashboard.getBoolean("Auto", false)) {
-    return Autos.fwAuto(m_exampleSubsystem,m_flywheelSubsystem,m_ledSubsystem);
+    return Autos.fwAuto(m_exampleSubsystem,m_flywheelSubsystem,LEDSub);
     }
     else {
       return Autos.exampleAuto(m_exampleSubsystem);

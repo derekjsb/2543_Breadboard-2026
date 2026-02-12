@@ -61,6 +61,14 @@ public class Robot extends TimedRobot {
     m_robotContainer.shiftIndex = 0;
     m_robotContainer.hubActive = false;
     m_robotContainer.hubTimer = 0.0;
+    if (DriverStation.isFMSAttached()) {noFmsConstant = 0;} else {noFmsConstant = 1;}
+    if (matchTime > -1) {
+      SmartDashboard.putNumber("Match Time", matchTime);
+      }
+      else {
+        SmartDashboard.putNumber("Match Time", Constants.disabledSeconds);
+     }
+     SmartDashboard.putNumber("Shift Time", DriverStation.getMatchTime() + noFmsConstant);
   }
 
   @Override

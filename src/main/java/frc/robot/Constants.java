@@ -53,6 +53,37 @@ public final class Constants {
     public static final int RASSBERRY = 11;
     public static final int WHITE = 12;
   }
+  public static final class DASHBOARD
+  {
+    public static final String ELEVATOR_POS = "Elevator Position";
+    public static final String FLYWHEEL_SPEED = "Flywheel Speed";
+    public static final String AIM_ENABLED = "Auto Aim Enabled";
+    public static final String HAS_TARGET = "Has Target";
+    public static final String MATCH_TIME = "Match Time";
+    public static final String SHIFT_TIME = "Shift Time";
+    public static final String LED_COLOR = "LED Color";
+    public static final String TARGET_ID = "Target ID";
+    public static final String HOOD_POS = "Hood Position";
+    public static final String ANGLE_HUB = "Angle to Hub";
+    public static final String DIST_HUB = "Distance to Hub";
+    public static final String TURRET_SET = "Turret Angle";
+  }
+  public static final class TIMES  // in seconds
+  {
+    public static final int ENDGAME = 30;
+    public static final int FLASH_WARNING = 5;
+    public static final int INITIAL_SHIFT = 10;
+    public static final int HUB_SHIFT = 25;
+    public static final int MAX_SHIFTS = 3;
+  }
+
+  public static final class CAMERA
+  {
+    public static final String CAMERA1 = "limelight-eleven";
+    public static final String CAMERA2 = "limelight-twelve";
+    public static final double AMBIGUITY_THRESHOLD = 0.3;   // percent ambiguity
+    public static final double DISTTOCAMERA_THRESHOLD = 3.0;  // meters
+  }
   public static final class TIMER_CONSTANTS 
   {
     public static final int ENDGAME_SECONDS = 30;

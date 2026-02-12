@@ -1,7 +1,6 @@
 package frc.robot.subsystems;
 
 import java.util.Optional;
-
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.I2C;
@@ -9,6 +8,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.COLORS;
+import frc.robot.Constants.TIMES;
+import frc.robot.Constants.DASHBOARD;
 
 public class LEDSubsystem extends SubsystemBase {
 
@@ -28,36 +29,52 @@ public class LEDSubsystem extends SubsystemBase {
 
   public LEDSubsystem() {
     arduino = new I2C(I2C.Port.kOnboard, 0x08);
-    arduino.write(ADDRESS_STATUS, ENABLED);
+    arduino.write(ADDRESS_STATUS, DISABLED);
     setEnabled(false);
     setAllianceColor();
     mode = SOLID_MODE;
     shiftColor = -1;
   }
 
+  public void resetShiftColor() {
+    shiftColor = -1;
+  }
+
+  public boolean isEndgame(int warning)
+  {
+    return DriverStation.getMatchTime() <= (TIMES.ENDGAME + warning) 
+      && DriverStation.getMatchTime() > 1 
+      && DriverStation.isTeleopEnabled();
+  } 
+
   public void setShiftColor(String initColor) {
+
+    // determine initial active color
     int color = COLORS.BLUE;
-    if(initColor.equals("R")) {
+    if(initColor.equals("B")) {
       color = COLORS.RED;
     }
 
+    // alternate shift colors after first shift
     if (shiftColor == -1) {
-      shiftColor = color;
+      shiftColor = color;   
     } else if (shiftColor == COLORS.BLUE) {
       shiftColor = COLORS.RED;
     } else {
       shiftColor = COLORS.BLUE;
     }
-
-    if(shiftColor != allianceColor) {
-      resetColor();
+    
+    // show white when you can shoot
+    if(shiftColor == allianceColor) {
+      setColor(COLORS.WHITE);
     } else {
       setColor(shiftColor);
     }
+   
   }
 
   public void setEnabled(boolean Enabled) {
-    if (Enabled == true) {
+    if (Enabled) {
       arduino.write(ADDRESS_STATUS, ENABLED);
     }
     else
@@ -74,6 +91,8 @@ public class LEDSubsystem extends SubsystemBase {
             allianceColor = COLORS.RED;
         }
     }
+    setColor(allianceColor);
+    setDashboardColor();
   }
 
   public void setFlashing(boolean flash) {
@@ -88,12 +107,11 @@ public class LEDSubsystem extends SubsystemBase {
   public void setColor(int color) {
     currentColor = color;
     color = color + mode;
-    setDashboardColor();
     arduino.write(ADDRESS_COLOR, color);
   }
 
   public void setDashboardColor() {
-    Color color = new Color(255, 255, 255);
+    Color color = new Color(255, 255, 255);     // white
     switch (currentColor) { 
       case (COLORS.BLUE):
         color = new Color(0, 0, 255);
@@ -105,12 +123,7 @@ public class LEDSubsystem extends SubsystemBase {
         color = new Color(0, 255, 0);
         break;
     }
-    SmartDashboard.putString("Example Color", color.toHexString());
-  }
-
-  public void resetColor() {
-    setFlashing(false);
-    setColor(COLORS.WHITE);
+    SmartDashboard.putString(DASHBOARD.LED_COLOR, color.toHexString());
   }
 
 }
