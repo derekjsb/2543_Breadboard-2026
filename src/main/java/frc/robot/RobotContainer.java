@@ -9,6 +9,7 @@ import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.jni.SwerveJNI.DriveState;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import edu.wpi.first.wpilibj.RobotState;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.Constants.JoystickChannels;
@@ -16,6 +17,7 @@ import frc.robot.Constants.ButtonIndex;
 import frc.robot.Constants.ButtonIndex.DriverLeft;
 import frc.robot.Constants.ButtonIndex.DriverRight;
 import frc.robot.Constants.COLORS;
+import frc.robot.Constants.DASHBOARD;
 import frc.robot.commands.Autos;
 import frc.robot.commands.BangBangCommand;
 import frc.robot.commands.ExampleCommand;
@@ -29,6 +31,7 @@ import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.FlywheelSubsystem;
 import frc.robot.subsystems.LEDSubsystem;
 // import frc.robot.subsystems.LedSubsystem;
+import frc.robot.util.Elastic;
 
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
@@ -46,7 +49,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.TIMER_CONSTANTS;
-import frc.robot.Constants.TIMES;;
+import frc.robot.Constants.TIMES;
 
 // import java.util.prefs.Preferences;
 
@@ -68,6 +71,7 @@ public class RobotContainer {
   private final Trigger disableTrigger;
   private final Trigger endgameWarningTrigger;
   private final Trigger endgameTrigger;
+  private final SendableChooser<String> autoChoose = new SendableChooser<String>();
   public int shiftIndex =  0;
   public boolean hubActive = true;
   public double hubTimer = 0.0;
@@ -209,6 +213,10 @@ private void setupDashboard() {
   SmartDashboard.putNumber("Turret Angle", 60); // in gyro
   SmartDashboard.putNumber("Turret Angle to Hub", 60); // in gyro
   SmartDashboard.putNumber("Turret Distance to Hub", 90); // in number bar
+  SmartDashboard.putNumber("Intake Angle", 75); // in degrees to horizontal
+  autoChoose.setDefaultOption("Nothing Burger", "Nothing Burger");
+  autoChoose.addOption("Nothing Fries", "Nothing Fries");
+    SmartDashboard.putData(DASHBOARD.AUTO_CHOOSER, autoChoose);
 }
 
 private boolean isEndgame(int warning)

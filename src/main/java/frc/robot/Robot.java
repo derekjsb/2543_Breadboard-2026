@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.util.Elastic;
 
 /**
  * The methods in this class are called automatically corresponding to each mode, as described in
@@ -69,6 +70,7 @@ public class Robot extends TimedRobot {
         SmartDashboard.putNumber("Match Time", Constants.disabledSeconds);
      }
      SmartDashboard.putNumber("Shift Time", DriverStation.getMatchTime() + noFmsConstant);
+     Elastic.selectTab("Disabled - Setup");
   }
 
   @Override
@@ -95,6 +97,7 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
     }
+    Elastic.selectTab("Auto");
   }
 
   /** This function is called periodically during autonomous. */
@@ -117,6 +120,7 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+    Elastic.selectTab("Teleop - Active Shift");
   }
 
   /** This function is called periodically during operator control. */

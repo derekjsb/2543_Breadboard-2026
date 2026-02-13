@@ -67,6 +67,8 @@ public final class Constants {
     public static final String ANGLE_HUB = "Angle to Hub";
     public static final String DIST_HUB = "Distance to Hub";
     public static final String TURRET_SET = "Turret Angle";
+    public static final String TURRENT_STATE = "Turret State";
+    public static final String AUTO_CHOOSER = "Auto Chooser";
   }
   public static final class TIMES  // in seconds
   {

@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.COLORS;
 import frc.robot.Constants.TIMES;
 import frc.robot.Constants.DASHBOARD;
+import frc.robot.util.Elastic;
 
 public class LEDSubsystem extends SubsystemBase {
 
@@ -67,8 +68,10 @@ public class LEDSubsystem extends SubsystemBase {
     // show white when you can shoot
     if(shiftColor == allianceColor) {
       setColor(COLORS.WHITE);
+      Elastic.selectTab("Teleop - Active Shift");
     } else {
       setColor(shiftColor);
+      Elastic.selectTab("Teleop - Inactive Shift");
     }
    
   }
