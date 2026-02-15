@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.COLORS;
-import frc.robot.Constants.TIMES;
 import frc.robot.Constants.DASHBOARD;
 import frc.robot.util.Elastic;
 
@@ -37,18 +36,7 @@ public class LEDSubsystem extends SubsystemBase {
     shiftColor = -1;
   }
 
-  public void resetShiftColor() {
-    shiftColor = -1;
-  }
-
-  public boolean isEndgame(int warning)
-  {
-    return DriverStation.getMatchTime() <= (TIMES.ENDGAME + warning) 
-      && DriverStation.getMatchTime() > 1 
-      && DriverStation.isTeleopEnabled();
-  } 
-
-  public void setShiftColor(String initColor) {
+  public void setShiftColor(String initColor, int shiftCount) {
 
     // determine initial active color
     int color = COLORS.BLUE;
@@ -57,8 +45,10 @@ public class LEDSubsystem extends SubsystemBase {
     }
 
     // alternate shift colors after first shift
-    if (shiftColor == -1) {
-      shiftColor = color;   
+    if (shiftCount == 0) {
+      shiftColor = color;
+    }else if (shiftCount > 3){
+      shiftColor = COLORS.GREEN;
     } else if (shiftColor == COLORS.BLUE) {
       shiftColor = COLORS.RED;
     } else {
@@ -68,10 +58,8 @@ public class LEDSubsystem extends SubsystemBase {
     // show white when you can shoot
     if(shiftColor == allianceColor) {
       setColor(COLORS.WHITE);
-      Elastic.selectTab("Teleop - Active Shift");
     } else {
       setColor(shiftColor);
-      Elastic.selectTab("Teleop - Inactive Shift");
     }
    
   }
@@ -111,6 +99,16 @@ public class LEDSubsystem extends SubsystemBase {
     currentColor = color;
     color = color + mode;
     arduino.write(ADDRESS_COLOR, color);
+  }
+
+  public void setTab()
+  {
+    if(currentColor == COLORS.WHITE || currentColor == COLORS.GREEN)
+    {
+      Elastic.selectTab("Teleop - Active Shift");
+    } else {
+      Elastic.selectTab("Teleop - Inactive Shift");
+    }
   }
 
   public void setDashboardColor() {

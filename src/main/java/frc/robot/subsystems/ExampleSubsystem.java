@@ -4,12 +4,17 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.SignalLogger;
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ExampleSubsystem extends SubsystemBase {
   /** Creates a new ExampleSubsystem. */
-  public ExampleSubsystem() {}
+  public ExampleSubsystem() {
+    SmartDashboard.putBoolean("Signal Logger Running", false);
+  }
 
   /**
    * Example command factory method.
@@ -35,6 +40,14 @@ public class ExampleSubsystem extends SubsystemBase {
     return false;
   }
 
+  public void startSignalLogger() {
+    SignalLogger.start();
+    SmartDashboard.putBoolean("Signal Logger Running", true);
+  }
+  public void stopSignalLogger() {
+    SignalLogger.stop();
+    SmartDashboard.putBoolean("Signal Logger Running", false);
+  }
   @Override
   public void periodic() {
     // This method will be called once per scheduler run

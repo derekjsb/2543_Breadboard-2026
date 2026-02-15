@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.SignalLogger;
+
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -26,6 +28,7 @@ public class HoodSubsystem extends SubsystemBase {
     }
     SmartDashboard.putNumber(DASHBOARD.HOOD_POS, position);
     hoodServo.set(position);
+    SignalLogger.writeDouble("Hood Position", position);
   }
 
   public void setByDistance(double dist)

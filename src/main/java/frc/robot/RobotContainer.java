@@ -7,6 +7,7 @@ package frc.robot;
 import static edu.wpi.first.units.Units.*;
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.jni.SwerveJNI.DriveState;
+import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -71,8 +72,6 @@ public class RobotContainer {
   private final Trigger autonomousTrigger;
   private final Trigger enableTrigger;
   private final Trigger disableTrigger;
-  private final Trigger endgameWarningTrigger;
-  private final Trigger endgameTrigger;
   private final SendableChooser<String> autoChoose = new SendableChooser<String>();
   public int shiftIndex =  0;
   public boolean hubActive = true;
@@ -108,8 +107,6 @@ public class RobotContainer {
     autonomousTrigger = new Trigger(RobotModeTriggers.autonomous());    
     enableTrigger = new Trigger(RobotModeTriggers.teleop());
     disableTrigger = new Trigger(RobotModeTriggers.disabled());
-    endgameWarningTrigger = new Trigger(() -> (LEDSub.isEndgame(TIMES.FLASH_WARNING)));
-    endgameTrigger = new Trigger(() -> (LEDSub.isEndgame(0)));
     // operatorLeftStick = new Joystick(JoystickChannels.OPERATOR_LEFT_JOYSTICK);
     // operatorRightStick = new Joystick(JoystickChannels.OPERATOR_RIGHT_JOYSTICK);
     // driverLeftStick = new Joystick(JoystickChannels.DRIVER_LEFT_JOYSTICK);
@@ -219,6 +216,10 @@ private void setupDashboard() {
   autoChoose.setDefaultOption("Nothing Burger", "Nothing Burger");
   autoChoose.addOption("Nothing Fries", "Nothing Fries");
     SmartDashboard.putData(DASHBOARD.AUTO_CHOOSER, autoChoose);
+  // SmartDashboard.putData("Start SignalLogger",m_exampleSubsystem.runOnce(() -> m_exampleSubsystem.startSignalLogger()));
+  // SmartDashboard.putData("Stop SignalLogger",m_exampleSubsystem.runOnce(() -> m_exampleSubsystem.stopSignalLogger()));
+  SmartDashboard.putData("Start SignalLogger",StartSignalLogger().ignoringDisable(true));
+  SmartDashboard.putData("Stop SignalLogger",StopSignalLogger().ignoringDisable(true));
 }
 
 private boolean isEndgame(int warning)
@@ -246,24 +247,6 @@ private boolean isEndgame(int warning)
     disableTrigger.onTrue(
       LEDSub.runOnce(() -> LEDSub.setEnabled(false)).ignoringDisable(true)
     );
-
-    // falsh endgame warning
-    endgameWarningTrigger.onTrue(
-      Commands.sequence(
-        LEDSub.runOnce(() -> LEDSub.setEnabled(true)),
-        LEDSub.runOnce(() -> LEDSub.setColor(COLORS.GREEN)),
-        LEDSub.runOnce(() -> LEDSub.setFlashing(true))
-      )
-
-    );
-
-    // endgame color change
-    endgameTrigger.onTrue(
-      Commands.sequence(
-        LEDSub.runOnce(() -> LEDSub.setDashboardColor()),
-        LEDSub.runOnce(() -> LEDSub.setFlashing(false))
-      )
-    );
     
   }
 
@@ -290,6 +273,14 @@ private boolean isEndgame(int warning)
     // cancelling on release.
     // m_driverController.ax.whileTrue(m_exampleSubsystem.exampleMethodCommand());
   }
+
+  public Command StartSignalLogger() {
+    return m_exampleSubsystem.runOnce(() -> m_exampleSubsystem.startSignalLogger());
+  }
+  public Command StopSignalLogger() {
+    return m_exampleSubsystem.runOnce(() -> m_exampleSubsystem.stopSignalLogger());
+  }
+
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.

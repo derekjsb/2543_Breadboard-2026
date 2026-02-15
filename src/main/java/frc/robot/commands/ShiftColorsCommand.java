@@ -29,7 +29,6 @@ public class ShiftColorsCommand extends Command {
 
     this.initialColor = "";
     shiftCount = 0;
-    ledSub.resetShiftColor();    
     shiftTime = TIMES.INITIAL_SHIFT;
     timer.reset();
     timer.start();
@@ -40,13 +39,12 @@ public class ShiftColorsCommand extends Command {
     ledSub.setColor(COLORS.WHITE);    
     ledSub.setFlashing(false);
     ledSub.setDashboardColor();
+    ledSub.setTab();
 
   }
 
   @Override
   public void execute() {
-
-    
 
     // update dashboard
     SmartDashboard.putNumber(DASHBOARD.SHIFT_TIME, (shiftTime - timer.get()));
@@ -63,8 +61,8 @@ public class ShiftColorsCommand extends Command {
 
       if (timer.hasElapsed(shiftTime - TIMES.FLASH_WARNING) && !shiftStarting)
       {
-        // falsh warning
-        ledSub.setShiftColor(initialColor);   
+        // flash warning
+        ledSub.setShiftColor(initialColor, shiftCount);   
         ledSub.setFlashing(true);     
         shiftStarting = true; // only set flashing once
       }
@@ -73,11 +71,16 @@ public class ShiftColorsCommand extends Command {
       {
         // set shift color
         ledSub.setDashboardColor();
+        ledSub.setTab();
         ledSub.setFlashing(false);
         timer.restart();
         shiftStarting = false;
         shiftTime = TIMES.HUB_SHIFT; // change to 25 seconds after initial 10 second round
         shiftCount++;
+        if(shiftCount > 4)
+        {
+          shiftTime = TIMES.ENDGAME; // change to 30 seconds for endgame shift
+        }
       }      
 
     }
@@ -90,6 +93,6 @@ public class ShiftColorsCommand extends Command {
 
   @Override
   public boolean isFinished() {
-    return shiftCount > TIMES.MAX_SHIFTS || DriverStation.isDisabled();
+    return shiftCount > TIMES.MAX_SHIFTS + 1 || DriverStation.isDisabled();
   }
 }

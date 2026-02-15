@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import frc.robot.Constants;
 
+import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
@@ -165,6 +166,8 @@ public void setPosition(double pos) {
     flywheelVelocity = Math.abs(velocitySignal.getValueAsDouble());
      SmartDashboard.putNumber("Flywheel Torque Current", flywheelTorqueCurrent);
     SmartDashboard.putNumber("Flywheel Speed", flywheelVelocity);
+     SignalLogger.writeDouble("Flywheel Torque Current", flywheelTorqueCurrent);
+     SignalLogger.writeDouble("Flywheel Speed", flywheelVelocity);
     if (SmartDashboard.getBoolean("Flywheel Config Refresh", false) == true) {setConfiguration();}
     if (Preferences.getInt(Constants.flywheelIdKey, Constants.flywheelIdDefaultValue) != flywheel.getDeviceID()) {flywheel = new TalonFX(Preferences.getInt(Constants.flywheelIdKey, Constants.flywheelIdDefaultValue));} 
   }
