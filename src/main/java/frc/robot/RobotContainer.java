@@ -29,6 +29,7 @@ import frc.robot.commands.ShiftColorsCommand;
 // import frc.robot.commands.LedEnableCommand;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.FlywheelSubsystem;
+import frc.robot.subsystems.HoodSubsystem;
 import frc.robot.subsystems.LEDSubsystem;
 // import frc.robot.subsystems.LedSubsystem;
 import frc.robot.util.Elastic;
@@ -66,6 +67,7 @@ public class RobotContainer {
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final FlywheelSubsystem m_flywheelSubsystem = new FlywheelSubsystem();
   private final LEDSubsystem LEDSub = new LEDSubsystem();
+  private final HoodSubsystem hoodSub = new HoodSubsystem();
   private final Trigger autonomousTrigger;
   private final Trigger enableTrigger;
   private final Trigger disableTrigger;
@@ -270,11 +272,16 @@ private boolean isEndgame(int warning)
     new Trigger(m_exampleSubsystem::exampleCondition)
         .onTrue(new ExampleCommand(m_exampleSubsystem));
 
-    new JoystickButton(m_driverController, 1).onTrue(new BangBangCommand(m_flywheelSubsystem, Preferences.getDouble("BangBang Nominal Current", 20)));
+    new JoystickButton(m_driverController, 1).onTrue(new BangBangCommand(m_flywheelSubsystem, Preferences.getDouble("BangBang Custom Speed", 2000)));
     new JoystickButton(m_driverController, 5).onTrue(new BangBangCommand(m_flywheelSubsystem, 0));
     new JoystickButton(m_driverController, 3).onTrue(new BangBangCommand(m_flywheelSubsystem, 2000));
     new JoystickButton(m_driverController, 4).onTrue(new BangBangCommand(m_flywheelSubsystem, 4000));
     new JoystickButton(m_driverController, 6).onTrue(new BangBangCommand(m_flywheelSubsystem, 5500));
+    new JoystickButton(m_driverController, 2).onTrue(hoodSub.runOnce(() -> hoodSub.setServo(Preferences.getDouble("Hood Custom Position", 0))));
+    new JoystickButton(m_driverController, 9).onTrue(hoodSub.runOnce(() -> hoodSub.setServo(0.25)));
+    new JoystickButton(m_driverController, 10).onTrue(hoodSub.runOnce(() -> hoodSub.setServo(0.5)));
+    new JoystickButton(m_driverController, 11).onTrue(hoodSub.runOnce(() -> hoodSub.setServo(0.75)));
+    new JoystickButton(m_driverController, 12).onTrue(hoodSub.runOnce(() -> hoodSub.setServo(1)));
 
     // turretResetTrigger.onTrue(new TurretResetCommand(m_turretSubsystem).ignoringDisable(true));
 

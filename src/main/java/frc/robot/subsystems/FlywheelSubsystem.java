@@ -46,6 +46,7 @@ public class FlywheelSubsystem extends SubsystemBase {
     Preferences.initBoolean("Use TorqueCurrentFOC", true);
     Preferences.initInt(Constants.flywheelIdKey, Constants.flywheelIdDefaultValue);
     Preferences.initString("Motor Default", "Kraken X44");
+    Preferences.initDouble("BangBang Custom Speed", 2000);
     motorChooser.addOption("Falcon 500", "Falcon 500");
     motorChooser.addOption("Kraken X60", "Kraken X60");
     motorChooser.addOption("Kraken X44", "Kraken X44");
