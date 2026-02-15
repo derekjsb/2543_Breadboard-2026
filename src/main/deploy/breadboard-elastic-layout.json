@@ -130,7 +130,7 @@
             "height": 256.0,
             "type": "Radial Gauge",
             "properties": {
-              "topic": "/SmartDashboard/Flywheel Velocity",
+              "topic": "/SmartDashboard/Flywheel Speed",
               "period": 0.06,
               "data_type": "double",
               "start_angle": -140.0,
@@ -170,7 +170,7 @@
           },
           {
             "title": "FMSInfo",
-            "x": 256.0,
+            "x": 768.0,
             "y": 384.0,
             "width": 384.0,
             "height": 128.0,
@@ -269,6 +269,34 @@
               "false_color": 4294198070,
               "true_icon": "None",
               "false_icon": "None"
+            }
+          },
+          {
+            "title": "BangBang Custom Speed",
+            "x": 256.0,
+            "y": 384.0,
+            "width": 256.0,
+            "height": 128.0,
+            "type": "Text Display",
+            "properties": {
+              "topic": "/Preferences/BangBang Custom Speed",
+              "period": 0.06,
+              "data_type": "double",
+              "show_submit_button": true
+            }
+          },
+          {
+            "title": "Hood Custom Position",
+            "x": 512.0,
+            "y": 384.0,
+            "width": 256.0,
+            "height": 128.0,
+            "type": "Text Display",
+            "properties": {
+              "topic": "/Preferences/Hood Custom Position",
+              "period": 0.06,
+              "data_type": "double",
+              "show_submit_button": true
             }
           }
         ]

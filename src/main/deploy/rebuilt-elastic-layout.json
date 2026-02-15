@@ -8,24 +8,6 @@
         "layouts": [],
         "containers": [
           {
-            "title": "Flywheel Velocity",
-            "x": 768.0,
-            "y": 384.0,
-            "width": 256.0,
-            "height": 128.0,
-            "type": "Number Bar",
-            "properties": {
-              "topic": "/SmartDashboard/Flywheel Velocity",
-              "period": 0.06,
-              "data_type": "double",
-              "min_value": 0.0,
-              "max_value": 120.0,
-              "divisions": 5,
-              "inverted": false,
-              "orientation": "horizontal"
-            }
-          },
-          {
             "title": "Hood Position",
             "x": 768.0,
             "y": 128.0,
@@ -46,7 +28,7 @@
           {
             "title": "Turret Angle",
             "x": 1024.0,
-            "y": 0.0,
+            "y": 256.0,
             "width": 256.0,
             "height": 256.0,
             "type": "Radial Gauge",
@@ -135,14 +117,14 @@
             }
           },
           {
-            "title": "limelight-eleven",
+            "title": "Limelight Twelve",
             "x": 384.0,
             "y": 0.0,
             "width": 256.0,
             "height": 256.0,
             "type": "Camera Stream",
             "properties": {
-              "topic": "/CameraPublisher/limelight-eleven",
+              "topic": "/CameraPublisher/limelight-twelve",
               "period": 0.06,
               "rotation_turns": 0
             }
@@ -175,7 +157,7 @@
           {
             "title": "Intake Angle",
             "x": 1024.0,
-            "y": 256.0,
+            "y": 0.0,
             "width": 256.0,
             "height": 256.0,
             "type": "Radial Gauge",
@@ -220,6 +202,23 @@
               "data_type": "double",
               "show_submit_button": true
             }
+          },
+          {
+            "title": "Flywheel Speed",
+            "x": 768.0,
+            "y": 384.0,
+            "width": 256.0,
+            "height": 128.0,
+            "type": "Number Bar",
+            "properties": {
+              "topic": "/SmartDashboard/Flywheel Speed",
+              "period": 0.06,
+              "min_value": 0.0,
+              "max_value": 120.0,
+              "divisions": 5,
+              "inverted": false,
+              "orientation": "horizontal"
+            }
           }
         ]
       }
@@ -229,24 +228,6 @@
       "grid_layout": {
         "layouts": [],
         "containers": [
-          {
-            "title": "Flywheel Velocity",
-            "x": 896.0,
-            "y": 384.0,
-            "width": 256.0,
-            "height": 128.0,
-            "type": "Number Bar",
-            "properties": {
-              "topic": "/SmartDashboard/Flywheel Velocity",
-              "period": 0.06,
-              "data_type": "double",
-              "min_value": 0.0,
-              "max_value": 120.0,
-              "divisions": 5,
-              "inverted": false,
-              "orientation": "horizontal"
-            }
-          },
           {
             "title": "Hood Position",
             "x": 1024.0,
@@ -336,14 +317,14 @@
             }
           },
           {
-            "title": "limelight-eleven",
+            "title": "Limelight Twelve",
             "x": 640.0,
             "y": 0.0,
             "width": 384.0,
             "height": 384.0,
             "type": "Camera Stream",
             "properties": {
-              "topic": "/CameraPublisher/limelight-eleven",
+              "topic": "/CameraPublisher/limelight-twelve",
               "period": 0.06,
               "rotation_turns": 0
             }
@@ -351,7 +332,7 @@
           {
             "title": "Intake Angle",
             "x": 1152.0,
-            "y": 256.0,
+            "y": 0.0,
             "width": 256.0,
             "height": 256.0,
             "type": "Radial Gauge",
@@ -397,7 +378,7 @@
           {
             "title": "Turret Angle to Hub",
             "x": 1152.0,
-            "y": 0.0,
+            "y": 256.0,
             "width": 256.0,
             "height": 256.0,
             "type": "Radial Gauge",
@@ -414,6 +395,23 @@
               "show_pointer": true,
               "show_ticks": true
             }
+          },
+          {
+            "title": "Flywheel Speed",
+            "x": 896.0,
+            "y": 384.0,
+            "width": 256.0,
+            "height": 128.0,
+            "type": "Number Bar",
+            "properties": {
+              "topic": "/SmartDashboard/Flywheel Speed",
+              "period": 0.06,
+              "min_value": 0.0,
+              "max_value": 120.0,
+              "divisions": 5,
+              "inverted": false,
+              "orientation": "horizontal"
+            }
           }
         ]
       }
@@ -424,16 +422,15 @@
         "layouts": [],
         "containers": [
           {
-            "title": "Flywheel Velocity",
+            "title": "Flywheel Speed",
             "x": 768.0,
             "y": 384.0,
             "width": 256.0,
             "height": 128.0,
             "type": "Number Bar",
             "properties": {
-              "topic": "/SmartDashboard/Flywheel Velocity",
+              "topic": "/SmartDashboard/Flywheel Speed",
               "period": 0.06,
-              "data_type": "double",
               "min_value": 0.0,
               "max_value": 120.0,
               "divisions": 5,
@@ -496,7 +493,7 @@
           {
             "title": "Turret Angle to Hub",
             "x": 1024.0,
-            "y": 0.0,
+            "y": 256.0,
             "width": 256.0,
             "height": 256.0,
             "type": "Radial Gauge",
@@ -598,14 +595,14 @@
             }
           },
           {
-            "title": "limelight-eleven",
+            "title": "Limelight Twelve",
             "x": 512.0,
             "y": 256.0,
             "width": 256.0,
             "height": 256.0,
             "type": "Camera Stream",
             "properties": {
-              "topic": "/CameraPublisher/limelight-eleven",
+              "topic": "/CameraPublisher/limelight-twelve",
               "period": 0.06,
               "rotation_turns": 0
             }
@@ -613,7 +610,7 @@
           {
             "title": "Intake Angle",
             "x": 1024.0,
-            "y": 256.0,
+            "y": 0.0,
             "width": 256.0,
             "height": 256.0,
             "type": "Radial Gauge",
@@ -640,27 +637,220 @@
         "layouts": [],
         "containers": [
           {
-            "title": "Flywheel Velocity",
-            "x": 896.0,
-            "y": 384.0,
+            "title": "Hood Position",
+            "x": 768.0,
+            "y": 128.0,
+            "width": 128.0,
+            "height": 128.0,
+            "type": "Number Bar",
+            "properties": {
+              "topic": "/SmartDashboard/Hood Position",
+              "period": 0.06,
+              "data_type": "double",
+              "min_value": 0.0,
+              "max_value": 100.0,
+              "divisions": 3,
+              "inverted": false,
+              "orientation": "horizontal"
+            }
+          },
+          {
+            "title": "Shift Time",
+            "x": 0.0,
+            "y": 0.0,
+            "width": 512.0,
+            "height": 256.0,
+            "type": "Match Time",
+            "properties": {
+              "topic": "/SmartDashboard/Shift Time",
+              "period": 0.06,
+              "data_type": "double",
+              "time_display_mode": "Minutes and Seconds",
+              "red_start_time": 3,
+              "yellow_start_time": 5
+            }
+          },
+          {
+            "title": "Turret Angle",
+            "x": 1024.0,
+            "y": 256.0,
+            "width": 256.0,
+            "height": 256.0,
+            "type": "Radial Gauge",
+            "properties": {
+              "topic": "/SmartDashboard/Turret Angle",
+              "period": 0.06,
+              "data_type": "double",
+              "start_angle": -135.0,
+              "end_angle": 135.0,
+              "min_value": -135.0,
+              "max_value": 135.0,
+              "number_of_labels": 8,
+              "wrap_value": false,
+              "show_pointer": true,
+              "show_ticks": true
+            }
+          },
+          {
+            "title": "LED Color",
+            "x": 512.0,
+            "y": 0.0,
+            "width": 128.0,
+            "height": 256.0,
+            "type": "Single Color View",
+            "properties": {
+              "topic": "/SmartDashboard/LED Color",
+              "period": 0.06,
+              "data_type": "string"
+            }
+          },
+          {
+            "title": "Turret Distance to Hub",
+            "x": 768.0,
+            "y": 0.0,
             "width": 256.0,
             "height": 128.0,
             "type": "Number Bar",
             "properties": {
-              "topic": "/SmartDashboard/Flywheel Velocity",
+              "topic": "/SmartDashboard/Turret Distance to Hub",
               "period": 0.06,
               "data_type": "double",
               "min_value": 0.0,
-              "max_value": 120.0,
+              "max_value": 100.0,
               "divisions": 5,
               "inverted": false,
               "orientation": "horizontal"
             }
           },
           {
+            "title": "Turret State",
+            "x": 768.0,
+            "y": 256.0,
+            "width": 256.0,
+            "height": 128.0,
+            "type": "Large Text Display",
+            "properties": {
+              "topic": "/SmartDashboard/Turret State",
+              "period": 0.06,
+              "data_type": "string"
+            }
+          },
+          {
+            "title": "Pose",
+            "x": 0.0,
+            "y": 256.0,
+            "width": 512.0,
+            "height": 256.0,
+            "type": "Field",
+            "properties": {
+              "topic": "/Pose",
+              "period": 0.06,
+              "field_game": "Rebuilt",
+              "robot_width": 0.85,
+              "robot_length": 0.85,
+              "show_other_objects": true,
+              "show_trajectories": true,
+              "field_rotation": 0.0,
+              "robot_color": 4282403741,
+              "trajectory_color": 4294967295,
+              "show_robot_outside_widget": true
+            }
+          },
+          {
+            "title": "Elevator Position",
+            "x": 640.0,
+            "y": 0.0,
+            "width": 128.0,
+            "height": 256.0,
+            "type": "Number Bar",
+            "properties": {
+              "topic": "/SmartDashboard/Elevator Position",
+              "period": 0.06,
+              "data_type": "double",
+              "min_value": 0.0,
+              "max_value": 30.0,
+              "divisions": 5,
+              "inverted": false,
+              "orientation": "vertical"
+            }
+          },
+          {
+            "title": "Limelight Twelve",
+            "x": 512.0,
+            "y": 256.0,
+            "width": 256.0,
+            "height": 256.0,
+            "type": "Camera Stream",
+            "properties": {
+              "topic": "/CameraPublisher/limelight-twelve",
+              "period": 0.06,
+              "rotation_turns": 0
+            }
+          },
+          {
+            "title": "Intake Angle",
+            "x": 1024.0,
+            "y": 0.0,
+            "width": 256.0,
+            "height": 256.0,
+            "type": "Radial Gauge",
+            "properties": {
+              "topic": "/SmartDashboard/Intake Angle",
+              "period": 0.06,
+              "data_type": "double",
+              "start_angle": -90.0,
+              "end_angle": 20.0,
+              "min_value": 0.0,
+              "max_value": 120.0,
+              "number_of_labels": 4,
+              "wrap_value": false,
+              "show_pointer": true,
+              "show_ticks": true
+            }
+          },
+          {
+            "title": "EventName",
+            "x": 896.0,
+            "y": 128.0,
+            "width": 128.0,
+            "height": 128.0,
+            "type": "Text Display",
+            "properties": {
+              "topic": "/FMSInfo/EventName",
+              "period": 0.06,
+              "data_type": "string",
+              "show_submit_button": false
+            }
+          },
+          {
+            "title": "Flywheel Speed",
+            "x": 768.0,
+            "y": 384.0,
+            "width": 256.0,
+            "height": 128.0,
+            "type": "Number Bar",
+            "properties": {
+              "topic": "/SmartDashboard/Flywheel Speed",
+              "period": 0.06,
+              "min_value": 0.0,
+              "max_value": 120.0,
+              "divisions": 5,
+              "inverted": false,
+              "orientation": "horizontal"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "Teleop - Inactive Shift v0",
+      "grid_layout": {
+        "layouts": [],
+        "containers": [
+          {
             "title": "Hood Position",
             "x": 1152.0,
-            "y": 0.0,
+            "y": 128.0,
             "width": 128.0,
             "height": 128.0,
             "type": "Number Bar",
@@ -694,7 +884,7 @@
           {
             "title": "Turret Angle",
             "x": 1280.0,
-            "y": 0.0,
+            "y": 128.0,
             "width": 128.0,
             "height": 128.0,
             "type": "Number Bar",
@@ -725,7 +915,7 @@
           {
             "title": "Turret State",
             "x": 1152.0,
-            "y": 128.0,
+            "y": 256.0,
             "width": 256.0,
             "height": 128.0,
             "type": "Large Text Display",
@@ -758,8 +948,8 @@
           },
           {
             "title": "Elevator Position",
-            "x": 640.0,
-            "y": 384.0,
+            "x": 1152.0,
+            "y": 0.0,
             "width": 256.0,
             "height": 128.0,
             "type": "Number Bar",
@@ -775,22 +965,22 @@
             }
           },
           {
-            "title": "limelight-eleven",
+            "title": "Limelight Twelve",
             "x": 0.0,
             "y": 256.0,
             "width": 384.0,
             "height": 256.0,
             "type": "Camera Stream",
             "properties": {
-              "topic": "/CameraPublisher/limelight-eleven",
+              "topic": "/CameraPublisher/limelight-twelve",
               "period": 0.06,
               "rotation_turns": 0
             }
           },
           {
             "title": "Intake Angle",
-            "x": 1152.0,
-            "y": 256.0,
+            "x": 896.0,
+            "y": 384.0,
             "width": 256.0,
             "height": 256.0,
             "type": "Radial Gauge",
@@ -806,6 +996,23 @@
               "wrap_value": false,
               "show_pointer": true,
               "show_ticks": true
+            }
+          },
+          {
+            "title": "Flywheel Speed",
+            "x": 1152.0,
+            "y": 384.0,
+            "width": 256.0,
+            "height": 128.0,
+            "type": "Number Bar",
+            "properties": {
+              "topic": "/SmartDashboard/Flywheel Speed",
+              "period": 0.06,
+              "min_value": 0.0,
+              "max_value": 120.0,
+              "divisions": 5,
+              "inverted": false,
+              "orientation": "horizontal"
             }
           }
         ]
