@@ -18,6 +18,7 @@ public class HoodSubsystem extends SubsystemBase {
   {
      hoodServo = new Servo(0);
      Preferences.initDouble("Hood Custom Position", 0);
+     SignalLogger.writeDouble("Hood Position", 0);
   }
 
   public void setServo(double position) {

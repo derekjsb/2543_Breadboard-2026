@@ -38,5 +38,45 @@
     "properties": {
       "persistent": true
     }
+  },
+  {
+    "name": "/Preferences/Swerve Speed Factor",
+    "type": "double",
+    "value": 0.5,
+    "properties": {
+      "persistent": true
+    }
+  },
+  {
+    "name": "/Preferences/Swerve Precision Factor",
+    "type": "double",
+    "value": 0.15,
+    "properties": {
+      "persistent": true
+    }
+  },
+  {
+    "name": "/Preferences/BangBang Nominal Current",
+    "type": "double",
+    "value": 20.0,
+    "properties": {
+      "persistent": true
+    }
+  },
+  {
+    "name": "/Preferences/BangBang Custom Speed",
+    "type": "double",
+    "value": 3129.7582629896265,
+    "properties": {
+      "persistent": true
+    }
+  },
+  {
+    "name": "/Preferences/Hood Custom Position",
+    "type": "double",
+    "value": 0.2846733096612708,
+    "properties": {
+      "persistent": true
+    }
   }
 ]

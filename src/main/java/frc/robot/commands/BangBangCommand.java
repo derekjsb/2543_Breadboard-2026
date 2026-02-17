@@ -8,6 +8,8 @@ import frc.robot.Constants;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.FlywheelSubsystem;
 
+import com.ctre.phoenix6.SignalLogger;
+
 // import java.util.prefs.Preferences;
 
 import edu.wpi.first.wpilibj.DriverStation;
@@ -43,6 +45,7 @@ public class BangBangCommand extends Command {
   public void initialize() {
     nominalCurrent = Preferences.getDouble("BangBang Nominal Current", 20);
     m_subsystem.setBangBangVoltage(16);
+    SignalLogger.writeDouble("BangBang Setpoint", speedSetPoint/60);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

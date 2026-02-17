@@ -54,6 +54,7 @@ public class FlywheelSubsystem extends SubsystemBase {
     motorChooser.setDefaultOption(Preferences.getString("Motor Default", "Kraken X44"), Preferences.getString("Motor Default", "Kraken X44"));
     SmartDashboard.putData(motorChooser);
     flywheel = new TalonFX(Preferences.getInt(Constants.flywheelIdKey, Constants.flywheelIdDefaultValue));
+    SignalLogger.writeDouble("BangBang Setpoint", 0);
     setConfiguration();
     loadPreferences();
   }
@@ -166,8 +167,8 @@ public void setPosition(double pos) {
     flywheelVelocity = Math.abs(velocitySignal.getValueAsDouble());
      SmartDashboard.putNumber("Flywheel Torque Current", flywheelTorqueCurrent);
     SmartDashboard.putNumber("Flywheel Speed", flywheelVelocity);
-     SignalLogger.writeDouble("Flywheel Torque Current", flywheelTorqueCurrent);
-     SignalLogger.writeDouble("Flywheel Speed", flywheelVelocity);
+    //  SignalLogger.writeDouble("Flywheel Torque Current", flywheelTorqueCurrent);
+    //  SignalLogger.writeDouble("Flywheel Speed", flywheelVelocity);
     if (SmartDashboard.getBoolean("Flywheel Config Refresh", false) == true) {setConfiguration();}
     if (Preferences.getInt(Constants.flywheelIdKey, Constants.flywheelIdDefaultValue) != flywheel.getDeviceID()) {flywheel = new TalonFX(Preferences.getInt(Constants.flywheelIdKey, Constants.flywheelIdDefaultValue));} 
   }
