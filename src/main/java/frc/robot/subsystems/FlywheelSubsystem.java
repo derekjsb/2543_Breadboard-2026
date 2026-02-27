@@ -13,10 +13,13 @@ import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.CoastOut;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.PositionDutyCycle;
 import com.ctre.phoenix6.controls.TorqueCurrentFOC;
+import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
+import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.GravityTypeValue;
@@ -31,6 +34,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class FlywheelSubsystem extends SubsystemBase {
   private TalonFX flywheel;
+  private TalonFX followerFlywheel;
   private TorqueCurrentFOC torquecurrent;
   private double torqueOutput;
   public double fwDeadband;
@@ -48,6 +52,7 @@ public class FlywheelSubsystem extends SubsystemBase {
     Preferences.initInt(Constants.flywheelIdKey, Constants.flywheelIdDefaultValue);
     Preferences.initString("Motor Default", "Kraken X44");
     Preferences.initDouble("BangBang Custom Speed", 2000);
+    Preferences.initInt("Flywheel Follower ID", 0);
     motorChooser.addOption("Falcon 500", "Falcon 500");
     motorChooser.addOption("Kraken X60", "Kraken X60");
     motorChooser.addOption("Kraken X44", "Kraken X44");
@@ -90,11 +95,17 @@ public class FlywheelSubsystem extends SubsystemBase {
     // System.out.println(speed);
   }
 
-public void setBangBangTorque(double torque) {
-  flywheel.setControl(new TorqueCurrentFOC(torque));
+public void setBangBangTorque(double velocity) {
+  // flywheel.setControl(new TorqueCurrentFOC(torque));
+  flywheel.setControl(new VelocityTorqueCurrentFOC(velocity));
 }
-public void setBangBangVoltage(double voltage) {
-  flywheel.setControl(new VoltageOut(voltage));
+public void setBangBangVoltage(double velocity) {
+  // flywheel.setControl(new VoltageOut(voltage));
+  if (velocity <= 1) {
+    flywheel.setControl(new VoltageOut(0));
+  } else {
+  flywheel.setControl(new VelocityVoltage(velocity));
+  }
 }
 
 public void setPosition(double pos) {
@@ -107,31 +118,55 @@ public void setPosition(double pos) {
       .withStatorCurrentLimitEnable(true)
       .withStatorCurrentLimit(Preferences.getDouble(Constants.maxTorqueKey, 15))
       .withSupplyCurrentLimitEnable(true)
-      .withSupplyCurrentLimit(Preferences.getDouble(Constants.maxTorqueKey, 10));
+      .withSupplyCurrentLimit(40);
 
     var motorOutputConfig = new MotorOutputConfigs()
       .withInverted(InvertedValue.CounterClockwise_Positive)
-      .withNeutralMode(NeutralModeValue.Coast);
+      .withNeutralMode(NeutralModeValue.Coast)
+      .withPeakForwardDutyCycle(1.0) //bang bang
+      .withPeakReverseDutyCycle(0);
     
-    var slot0Config = new Slot0Configs()
+    // var slot0Config = new Slot0Configs()
+    //   .withGravityType(GravityTypeValue.Elevator_Static)
+    //   .withKA(0)
+    //   .withKG(0.0)
+    //   .withKP(0.4)
+    //   .withKI(0.03)
+    //   .withKS(0.02)
+    //   .withKV(0.0)
+    //   .withKD(0.01);
+    var slot0Config = new Slot0Configs() //bang bang
       .withGravityType(GravityTypeValue.Elevator_Static)
       .withKA(0)
       .withKG(0.0)
-      .withKP(0.4)
-      .withKI(0.03)
-      .withKS(0.02)
+      .withKP(999999.0)
+      .withKI(0.0)
+      .withKS(0.0)
       .withKV(0.0)
-      .withKD(0.01);
+      .withKD(0.0);
 
     var talonFXConfig = new TalonFXConfiguration()
       .withMotorOutput(motorOutputConfig)
       .withSlot0(slot0Config)
       .withCurrentLimits(currentLimitConfig);
 
+    talonFXConfig.TorqueCurrent.PeakForwardTorqueCurrent = 40.0;
+    talonFXConfig.TorqueCurrent.PeakReverseTorqueCurrent = 0.0;
+    talonFXConfig.Voltage.PeakReverseVoltage = 0.0;
+    talonFXConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+
     flywheel.getConfigurator().apply(talonFXConfig);
+
+    if (Preferences.getInt("Flywheel Follower ID", 0) != 0) {
+      if (followerFlywheel == null) {
+      followerFlywheel = new TalonFX(Preferences.getInt("Flywheel Follower ID", 0));
+      }
+      followerFlywheel.getConfigurator().apply(talonFXConfig);
+      followerFlywheel.setControl(new Follower(Preferences.getInt(Constants.flywheelIdKey, 17), MotorAlignmentValue.Opposed));
+    }
     
     SmartDashboard.putBoolean("Flywheel Config Refresh", false);
-    SmartDashboard.putBoolean("Flyheel Pro Licensed", flywheel.getIsProLicensed(false).getValue());
+    // SmartDashboard.putBoolean("Flyheel Pro Licensed", flywheel.getIsProLicensed(false).getValue());
   }
 
   public void loadPreferences() {

@@ -255,12 +255,12 @@ private boolean isEndgame(int warning)
     new Trigger(m_exampleSubsystem::exampleCondition)
         .onTrue(new ExampleCommand(m_exampleSubsystem));
 
-    new JoystickButton(m_driverController, 1).onTrue(new BangBangCommand(m_flywheelSubsystem, Preferences.getDouble("BangBang Custom Speed", 2000)));
+    new JoystickButton(m_driverController, 1).onTrue(new BangBangCommand(m_flywheelSubsystem, 99999999));
     new JoystickButton(m_driverController, 5).onTrue(new BangBangCommand(m_flywheelSubsystem, 0));
     new JoystickButton(m_driverController, 3).onTrue(new BangBangCommand(m_flywheelSubsystem, 2000));
     new JoystickButton(m_driverController, 4).onTrue(new BangBangCommand(m_flywheelSubsystem, 4000));
     new JoystickButton(m_driverController, 6).onTrue(new BangBangCommand(m_flywheelSubsystem, 5500));
-    new JoystickButton(m_driverController, 2).onTrue(hoodSub.runOnce(() -> hoodSub.setServo(Preferences.getDouble("Hood Custom Position", 0))));
+    new JoystickButton(m_driverController, 2).onTrue(hoodSub.runOnce(() -> hoodSub.setServo(99999999)));
     new JoystickButton(m_driverController, 9).onTrue(hoodSub.runOnce(() -> hoodSub.setServo(0.25)));
     new JoystickButton(m_driverController, 10).onTrue(hoodSub.runOnce(() -> hoodSub.setServo(0.5)));
     new JoystickButton(m_driverController, 11).onTrue(hoodSub.runOnce(() -> hoodSub.setServo(0.75)));

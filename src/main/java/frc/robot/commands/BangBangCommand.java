@@ -33,6 +33,9 @@ public class BangBangCommand extends Command {
   public BangBangCommand(FlywheelSubsystem subsystem, double speed) {
     m_subsystem = subsystem;
     speedSetPoint = speed/60;
+    // if (speed == 99999999) {
+    //   speedSetPoint = Preferences.getDouble("BangBang Custom Speed", 2500)/60;
+    // }
     speedReady = false;
     Preferences.initDouble("BangBang Nominal Current", 20);
     nominalCurrent = Preferences.getDouble("BangBang Nominal Current", 20);
@@ -43,8 +46,11 @@ public class BangBangCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    if (speedSetPoint * 60 >= 99999990) {
+      speedSetPoint = Preferences.getDouble("BangBang Custom Speed", 2500)/60;
+    }
     nominalCurrent = Preferences.getDouble("BangBang Nominal Current", 20);
-    m_subsystem.setBangBangVoltage(16);
+    m_subsystem.setBangBangVoltage(speedSetPoint);
     SignalLogger.writeDouble("BangBang Setpoint", speedSetPoint/60);
   }
 
@@ -52,12 +58,14 @@ public class BangBangCommand extends Command {
   @Override
   public void execute() {
     if (speedReady) {
-      if (m_subsystem.getVelocity() < speedSetPoint) {
-        m_subsystem.setBangBangTorque(nominalCurrent);
-      }
-      else {
-        m_subsystem.setBangBangTorque(0);
-      }
+      // if (m_subsystem.getVelocity() < speedSetPoint) {
+      //   m_subsystem.setBangBangTorque(nominalCurrent);
+      // }
+      // else {
+      //   m_subsystem.setBangBangTorque(0);
+      // }
+      
+      m_subsystem.setBangBangTorque(speedSetPoint);
     }
     else {
       if (m_subsystem.getVelocity() > speedSetPoint) {speedReady = true;}

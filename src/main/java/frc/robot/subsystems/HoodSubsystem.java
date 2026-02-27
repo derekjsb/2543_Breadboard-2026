@@ -11,17 +11,20 @@ import frc.robot.Constants.DASHBOARD;
 public class HoodSubsystem extends SubsystemBase {
   
   private final Servo hoodServo;
+  private final Servo hoodServo2;
   private static final double SLOPE = 1;
   private static final double INTERCEPT = 0;
 
   public HoodSubsystem() 
   {
      hoodServo = new Servo(0);
+     hoodServo2 = new Servo(1);
      Preferences.initDouble("Hood Custom Position", 0);
      SignalLogger.writeDouble("Hood Position", 0);
   }
 
   public void setServo(double position) {
+    if (position >= 99999990) {position = Preferences.getDouble("Hood Custom Position", 0);}
     if (position > 1) {
       position = 1;
     } else if (position < 0) {
@@ -29,6 +32,7 @@ public class HoodSubsystem extends SubsystemBase {
     }
     SmartDashboard.putNumber(DASHBOARD.HOOD_POS, position);
     hoodServo.set(position);
+    hoodServo2.set(position);
     SignalLogger.writeDouble("Hood Position", position);
   }
 
